@@ -71,3 +71,10 @@ Thumbs.db
 *.dll
 *.exe
 
+#CMake
+CMakeFiles
+CMakeCache.txt
+*.cmake
+
+#bin
+WebSocketServer

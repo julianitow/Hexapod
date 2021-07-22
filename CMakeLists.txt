@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.13)
 
 project(WebSocketServer LANGUAGES CXX)
 
@@ -18,9 +18,12 @@ set(TS_FILES WebSocketServer_fr_FR.ts)
 
 add_executable(WebSocketServer
   main.cpp
+  WebSocketServer.cpp
   ${TS_FILES}
 )
-target_link_libraries(WebSocketServer Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::WebSockets)
+target_include_directories(WebSocketServer PUBLIC /home/julianitow/rpi-qt/sysroot/include)
+target_link_directories(WebSocketServer PUBLIC /home/julianitow/rpi-qt/sysroot/lib)
+target_link_libraries(WebSocketServer Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::WebSockets )
 
 if(COMMAND qt_create_translation)
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})

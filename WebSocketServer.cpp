@@ -1,10 +1,11 @@
 #include "WebSocketServer.h"
 
 WebSocketServer::WebSocketServer(int port, QObject *parent) : QObject(parent), webSocketServer(nullptr) {
+    // this->process->setProgram("python");
     webSocketServer = new QWebSocketServer("Robot server", QWebSocketServer::SecureMode, this);
     QSslConfiguration sslConfiguration;
-    QString certPath = qApp->applicationDirPath().append("./localhost.cert");
-    QString keyPath = qApp->applicationDirPath().append("./localhost.key");
+    QString certPath = qApp->applicationDirPath().append("/localhost.cert");
+    QString keyPath = qApp->applicationDirPath().append("/localhost.key");
     QFile certFile(certPath);
     QFile keyFile(keyPath);
     certFile.open(QIODevice::ReadOnly);
@@ -37,7 +38,7 @@ void WebSocketServer::onNewConnection()
 {
     QWebSocket *pSocket = webSocketServer->nextPendingConnection();
 
-    qDebug() << "Client connected:" << pSocket->peerName() << pSocket->origin();
+    qDebug() << "Client connected:" << pSocket->peerName() << pSocket->origin() << pSocket->localAddress();
 
     connect(pSocket, &QWebSocket::textMessageReceived, this, &WebSocketServer::processMessage);
     connect(pSocket, &QWebSocket::disconnected, this, &WebSocketServer::socketDisconnected);
@@ -61,11 +62,54 @@ void WebSocketServer::onSslError(const QList<QSslError> &)
     qDebug() << "Ssl errors occurred";
 }
 
+QByteArray WebSocketServer::executeScript(QString script, QString arg) {
+    this->process = new QProcess(this->parent());
+    QString scriptFile = QDir::currentPath() + QDir::separator() + script + ".py";
+    QStringList args = QStringList();
+    args << scriptFile;
+    args << arg;
+    this->process->start("python", args, QIODevice::ReadWrite);
+    qDebug() << "EC:" << this->process->exitCode();
+
+    if(!this->process->waitForStarted(-1)){
+        qDebug() << "An error occured while starting process";
+        return "Error";
+    }
+
+    if(this->process->waitForFinished(-1)){
+        QByteArray result = this->process->readAllStandardOutput();
+        qDebug() << "result" << result;
+        this->process->close();
+        return result;
+    } else {
+        qDebug() << "An error occured while running process";
+        return "Error";
+    }
+}
+
 void WebSocketServer::processMessage(QString message) {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
     qDebug() << "Received:" << message;
     if(pClient) {
-        pClient->sendTextMessage("Well received: " + message);
+        if(message == "distance"){
+            QByteArray data = executeScript(message);
+            pClient->sendTextMessage(data);
+        } else if (message.contains("lcdprint")){
+            QStringList splited = message.split(":");
+            QString lcdMessage = splited[1];
+            if(lcdMessage.size() > 16){
+                pClient->sendTextMessage("Message too long");
+                return;
+            }
+            executeScript("LCD", lcdMessage);
+            qDebug() << this->process->readAll();
+        } else if (message.contains("wut")) {
+            QStringList splited = message.split(" ");
+            QString timeString = splited[2].split(".")[0];
+            qDebug() << timeString;
+            Alarm alarm = Alarm(timeString.toStdString().c_str());
+            alarm.waitForBuzz();
+        }
     }
 }
 

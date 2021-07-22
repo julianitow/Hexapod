@@ -17,7 +17,7 @@ CXX           = /home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/bin/arm-linux
 DEFINES       = -DQT_NO_DEBUG -DQT_WEBSOCKETS_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -march=armv8-a -mtune=cortex-a72 -mfpu=crypto-neon-fp-armv8 -mfloat-abi=hard --sysroot=/home/julianitow/rpi-qt/sysroot/ -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -march=armv8-a -mtune=cortex-a72 -mfpu=crypto-neon-fp-armv8 -mfloat-abi=hard --sysroot=/home/julianitow/rpi-qt/sysroot/ -O2 -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -I../../rpi-qt/qt5.15/include -I../../rpi-qt/qt5.15/include/QtWebSockets -I../../rpi-qt/qt5.15/include/QtNetwork -I../../rpi-qt/qt5.15/include/QtCore -I. -I../../rpi-qt/qt5.15/mkspecs/devices/linux-rasp-pi4-v3d-g++ -I../../rpi-qt/sysroot/usr/include/arm-linux-gnueabihf
+INCPATH       = -I. -I/home/julianitow/rpi-qt/sysroot/usr/include/arm-linux-gnueabihf -I/home/julianitow/rpi-qt/qt5.15/include -I/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets -I/home/julianitow/rpi-qt/qt5.15/include/QtNetwork -I/home/julianitow/rpi-qt/qt5.15/include/QtCore -I. -I/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/linux-rasp-pi4-v3d-g++
 QMAKE         = /home/julianitow/rpi-qt/qt5.15/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -37,10 +37,10 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = WebSocketServer1.0.0
-DISTDIR = /home/julianitow/work/WebSocketServerQt/.tmp/WebSocketServer1.0.0
+DISTDIR = /mnt/hgfs/guill/work/WebSocketServerQt/.tmp/WebSocketServer1.0.0
 LINK          = /home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/bin/arm-linux-gnueabihf-g++
-LFLAGS        = -mfloat-abi=hard --sysroot=/home/julianitow/rpi-qt/sysroot/ -Wl,-O1 -Wl,-rpath,/usr/local/qt5.15/lib -Wl,-rpath-link,/home/julianitow/rpi-qt/sysroot/usr/lib/arm-linux-gnueabihf -Wl,-rpath-link,/home/julianitow/rpi-qt/sysroot/lib/arm-linux-gnueabihf
-LIBS          = $(SUBLIBS) /home/julianitow/rpi-qt/qt5.15/lib/libQt5WebSockets.so /home/julianitow/rpi-qt/qt5.15/lib/libQt5Network.so /home/julianitow/rpi-qt/qt5.15/lib/libQt5Core.so -lpthread   
+LFLAGS        = -mfloat-abi=hard --sysroot=/home/julianitow/rpi-qt/sysroot/ -Wl,-O1 -Wl,-rpath,/usr/local/qt5.15/lib -Wl,-rpath-link,/home/julianitow/rpi-qt/sysroot/usr/lib/arm-linux-gnueabihf -Wl,-rpath-link,/home/julianitow/rpi-qt/sysroot/lib/arm-linux-gnueabihf,-L/home/julianitow/rpi-qt/sysroot/usr/lib/arm-linux-gnueabihf/
+LIBS          = $(SUBLIBS) /home/julianitow/rpi-qt/qt5.15/lib/libQt5WebSockets.so /home/julianitow/rpi-qt/qt5.15/lib/libQt5Network.so /home/julianitow/rpi-qt/qt5.15/lib/libQt5Core.so -L/home/julianitow/rpi-qt/sysroot/usr/lib/arm-linux-gnueabihf/libpthread.so -L/home/julianitow/rpi-qt/sysroot/usr/lib/arm-linux-gnueabihf/libm.so -lpthread
 AR            = /home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/bin/arm-linux-gnueabihf-ar cqs
 RANLIB        = 
 SED           = sed
@@ -52,205 +52,213 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = WebSocketServer.cpp \
+SOURCES       = Alarm.cpp \
+		Brain.cpp \
+		WebSocketServer.cpp \
 		main.cpp moc_WebSocketServer.cpp
-OBJECTS       = WebSocketServer.o \
+OBJECTS       = Alarm.o \
+		Brain.o \
+		WebSocketServer.o \
 		main.o \
 		moc_WebSocketServer.o
 DIST          = localhost.cert \
 		localhost.key \
-		../../rpi-qt/qt5.15/mkspecs/features/spec_pre.prf \
-		../../rpi-qt/qt5.15/mkspecs/common/unix.conf \
-		../../rpi-qt/qt5.15/mkspecs/common/linux.conf \
-		../../rpi-qt/qt5.15/mkspecs/common/sanitize.conf \
-		../../rpi-qt/qt5.15/mkspecs/common/gcc-base.conf \
-		../../rpi-qt/qt5.15/mkspecs/common/gcc-base-unix.conf \
-		../../rpi-qt/qt5.15/mkspecs/common/g++-base.conf \
-		../../rpi-qt/qt5.15/mkspecs/common/g++-unix.conf \
-		../../rpi-qt/qt5.15/mkspecs/qdevice.pri \
-		../../rpi-qt/qt5.15/mkspecs/features/device_config.prf \
-		../../rpi-qt/qt5.15/mkspecs/devices/common/linux_device_pre.conf \
-		../../rpi-qt/qt5.15/mkspecs/devices/common/linux_device_post.conf \
-		../../rpi-qt/qt5.15/mkspecs/devices/common/linux_arm_device_post.conf \
-		../../rpi-qt/qt5.15/mkspecs/qconfig.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3danimation.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3danimation_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dcore.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dcore_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dextras.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dextras_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dinput.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dinput_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dlogic.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dlogic_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquick.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquick_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickanimation.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickanimation_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickextras.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickextras_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickinput.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickinput_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickrender.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickrender_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickscene2d.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickscene2d_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3drender.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3drender_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_accessibility_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_bluetooth.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_bluetooth_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_bodymovin_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_bootstrap_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_charts.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_charts_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_concurrent.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_concurrent_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_core.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_core_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_datavisualization.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_datavisualization_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_dbus.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_dbus_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_devicediscovery_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_edid_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_egl_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_eglfs_kms_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_eglfsdeviceintegration_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_eventdispatcher_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_fb_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_fontdatabase_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_gamepad.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_gamepad_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_gui.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_gui_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_help.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_help_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_input_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_kms_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_location.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_location_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimedia.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimedia_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediagsttools_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediawidgets.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediawidgets_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_network.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_network_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_networkauth.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_networkauth_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_nfc.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_nfc_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_opengl.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_opengl_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_openglextensions.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_openglextensions_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_packetprotocol_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_platformcompositor_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioning.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioning_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioningquick.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioningquick_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_printsupport.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_printsupport_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_purchasing.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_purchasing_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qml.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qml_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmldebug_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmldevtools_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlmodels.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlmodels_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmltest.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmltest_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlworkerscript.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlworkerscript_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3d.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3d_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dassetimport.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dassetimport_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3drender.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3drender_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3druntimerender.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3druntimerender_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dutils.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dutils_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickcontrols2.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickcontrols2_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickparticles_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickshapes_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quicktemplates2.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quicktemplates2_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickwidgets.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickwidgets_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_remoteobjects.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_remoteobjects_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_repparser.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_repparser_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_scxml.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_scxml_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_sensors.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_sensors_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialbus.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialbus_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialport.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialport_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_service_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_sql.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_sql_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_svg.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_svg_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_testlib.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_testlib_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_texttospeech.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_texttospeech_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_theme_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_uiplugin.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_uitools.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_uitools_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_virtualkeyboard.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_virtualkeyboard_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_vulkan_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_webchannel.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_webchannel_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_websockets.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_websockets_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_webview.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_webview_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_widgets.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_widgets_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xkbcommon_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xml.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xml_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xmlpatterns.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_zlib_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/features/qt_functions.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/qt_config.prf \
-		../../rpi-qt/qt5.15/mkspecs/devices/linux-rasp-pi4-v3d-g++/qmake.conf \
-		../../rpi-qt/qt5.15/mkspecs/features/spec_post.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/spec_pre.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/unix.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/linux.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/sanitize.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/gcc-base.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/gcc-base-unix.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/g++-base.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/g++-unix.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/qdevice.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/device_config.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/common/linux_device_pre.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/common/linux_device_post.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/common/linux_arm_device_post.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/qconfig.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3danimation.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3danimation_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dcore.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dcore_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dextras.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dextras_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dinput.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dinput_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dlogic.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dlogic_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquick.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquick_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickanimation.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickanimation_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickextras.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickextras_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickinput.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickinput_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickrender.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickrender_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickscene2d.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickscene2d_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3drender.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3drender_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_accessibility_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_bluetooth.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_bluetooth_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_bodymovin_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_bootstrap_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_charts.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_charts_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_concurrent.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_concurrent_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_core.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_core_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_datavisualization.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_datavisualization_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_dbus.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_dbus_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_devicediscovery_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_edid_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_egl_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_eglfs_kms_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_eglfsdeviceintegration_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_eventdispatcher_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_fb_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_fontdatabase_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_gamepad.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_gamepad_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_gui.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_gui_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_help.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_help_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_input_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_kms_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_location.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_location_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimedia.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimedia_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediagsttools_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediawidgets.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediawidgets_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_network.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_network_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_networkauth.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_networkauth_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_nfc.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_nfc_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_opengl.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_opengl_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_openglextensions.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_openglextensions_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_packetprotocol_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_platformcompositor_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioning.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioning_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioningquick.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioningquick_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_printsupport.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_printsupport_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_purchasing.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_purchasing_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qml.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qml_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmldebug_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmldevtools_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlmodels.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlmodels_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmltest.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmltest_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlworkerscript.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlworkerscript_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3d.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3d_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dassetimport.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dassetimport_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3drender.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3drender_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3druntimerender.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3druntimerender_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dutils.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dutils_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickcontrols2.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickcontrols2_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickparticles_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickshapes_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quicktemplates2.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quicktemplates2_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickwidgets.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickwidgets_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_remoteobjects.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_remoteobjects_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_repparser.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_repparser_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_scxml.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_scxml_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_sensors.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_sensors_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialbus.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialbus_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialport.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialport_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_service_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_sql.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_sql_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_svg.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_svg_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_testlib.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_testlib_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_texttospeech.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_texttospeech_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_theme_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_uiplugin.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_uitools.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_uitools_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_virtualkeyboard.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_virtualkeyboard_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_vulkan_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_webchannel.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_webchannel_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_websockets.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_websockets_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_webview.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_webview_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_widgets.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_widgets_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xkbcommon_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xml.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xml_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xmlpatterns.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_zlib_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/qt_functions.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/qt_config.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/linux-rasp-pi4-v3d-g++/qmake.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/spec_post.prf \
 		.qmake.stash \
-		../../rpi-qt/qt5.15/mkspecs/features/exclusive_builds.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/toolchain.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/default_pre.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/resolve_config.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/default_post.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/warn_on.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/qt.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/resources_functions.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/resources.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/moc.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/unix/thread.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/qmake_use.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/file_copies.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/testcase_targets.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/exceptions.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/yacc.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/lex.prf \
-		WebSocketServer.pro WebSocketServer.h WebSocketServer.cpp \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/exclusive_builds.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/toolchain.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/default_pre.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/resolve_config.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/default_post.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/warn_on.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/qt.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/resources_functions.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/resources.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/moc.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/unix/thread.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/qmake_use.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/file_copies.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/testcase_targets.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/exceptions.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/yacc.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/lex.prf \
+		WebSocketServer.pro Alarm.h \
+		Brain.h \
+		WebSocketServer.h Alarm.cpp \
+		Brain.cpp \
+		WebSocketServer.cpp \
 		main.cpp
 QMAKE_TARGET  = WebSocketServer
 DESTDIR       = 
@@ -263,390 +271,390 @@ first: all
 WebSocketServer:  $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
-Makefile: WebSocketServer.pro ../../rpi-qt/qt5.15/mkspecs/devices/linux-rasp-pi4-v3d-g++/qmake.conf ../../rpi-qt/qt5.15/mkspecs/features/spec_pre.prf \
-		../../rpi-qt/qt5.15/mkspecs/common/unix.conf \
-		../../rpi-qt/qt5.15/mkspecs/common/linux.conf \
-		../../rpi-qt/qt5.15/mkspecs/common/sanitize.conf \
-		../../rpi-qt/qt5.15/mkspecs/common/gcc-base.conf \
-		../../rpi-qt/qt5.15/mkspecs/common/gcc-base-unix.conf \
-		../../rpi-qt/qt5.15/mkspecs/common/g++-base.conf \
-		../../rpi-qt/qt5.15/mkspecs/common/g++-unix.conf \
-		../../rpi-qt/qt5.15/mkspecs/qdevice.pri \
-		../../rpi-qt/qt5.15/mkspecs/features/device_config.prf \
-		../../rpi-qt/qt5.15/mkspecs/devices/common/linux_device_pre.conf \
-		../../rpi-qt/qt5.15/mkspecs/devices/common/linux_device_post.conf \
-		../../rpi-qt/qt5.15/mkspecs/devices/common/linux_arm_device_post.conf \
-		../../rpi-qt/qt5.15/mkspecs/qconfig.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3danimation.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3danimation_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dcore.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dcore_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dextras.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dextras_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dinput.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dinput_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dlogic.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dlogic_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquick.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquick_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickanimation.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickanimation_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickextras.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickextras_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickinput.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickinput_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickrender.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickrender_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickscene2d.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickscene2d_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3drender.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3drender_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_accessibility_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_bluetooth.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_bluetooth_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_bodymovin_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_bootstrap_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_charts.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_charts_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_concurrent.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_concurrent_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_core.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_core_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_datavisualization.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_datavisualization_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_dbus.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_dbus_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_devicediscovery_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_edid_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_egl_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_eglfs_kms_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_eglfsdeviceintegration_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_eventdispatcher_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_fb_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_fontdatabase_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_gamepad.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_gamepad_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_gui.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_gui_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_help.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_help_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_input_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_kms_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_location.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_location_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimedia.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimedia_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediagsttools_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediawidgets.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediawidgets_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_network.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_network_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_networkauth.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_networkauth_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_nfc.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_nfc_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_opengl.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_opengl_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_openglextensions.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_openglextensions_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_packetprotocol_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_platformcompositor_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioning.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioning_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioningquick.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioningquick_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_printsupport.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_printsupport_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_purchasing.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_purchasing_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qml.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qml_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmldebug_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmldevtools_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlmodels.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlmodels_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmltest.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmltest_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlworkerscript.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlworkerscript_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3d.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3d_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dassetimport.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dassetimport_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3drender.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3drender_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3druntimerender.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3druntimerender_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dutils.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dutils_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickcontrols2.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickcontrols2_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickparticles_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickshapes_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quicktemplates2.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quicktemplates2_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickwidgets.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickwidgets_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_remoteobjects.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_remoteobjects_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_repparser.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_repparser_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_scxml.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_scxml_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_sensors.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_sensors_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialbus.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialbus_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialport.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialport_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_service_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_sql.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_sql_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_svg.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_svg_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_testlib.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_testlib_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_texttospeech.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_texttospeech_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_theme_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_uiplugin.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_uitools.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_uitools_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_virtualkeyboard.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_virtualkeyboard_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_vulkan_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_webchannel.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_webchannel_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_websockets.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_websockets_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_webview.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_webview_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_widgets.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_widgets_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xkbcommon_support_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xml.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xml_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xmlpatterns.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_zlib_private.pri \
-		../../rpi-qt/qt5.15/mkspecs/features/qt_functions.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/qt_config.prf \
-		../../rpi-qt/qt5.15/mkspecs/devices/linux-rasp-pi4-v3d-g++/qmake.conf \
-		../../rpi-qt/qt5.15/mkspecs/features/spec_post.prf \
+Makefile: WebSocketServer.pro /home/julianitow/rpi-qt/qt5.15/mkspecs/devices/linux-rasp-pi4-v3d-g++/qmake.conf /home/julianitow/rpi-qt/qt5.15/mkspecs/features/spec_pre.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/unix.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/linux.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/sanitize.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/gcc-base.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/gcc-base-unix.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/g++-base.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/common/g++-unix.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/qdevice.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/device_config.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/common/linux_device_pre.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/common/linux_device_post.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/common/linux_arm_device_post.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/qconfig.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3danimation.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3danimation_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dcore.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dcore_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dextras.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dextras_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dinput.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dinput_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dlogic.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dlogic_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquick.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquick_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickanimation.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickanimation_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickextras.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickextras_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickinput.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickinput_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickrender.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickrender_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickscene2d.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickscene2d_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3drender.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3drender_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_accessibility_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_bluetooth.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_bluetooth_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_bodymovin_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_bootstrap_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_charts.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_charts_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_concurrent.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_concurrent_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_core.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_core_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_datavisualization.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_datavisualization_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_dbus.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_dbus_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_devicediscovery_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_edid_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_egl_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_eglfs_kms_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_eglfsdeviceintegration_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_eventdispatcher_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_fb_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_fontdatabase_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_gamepad.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_gamepad_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_gui.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_gui_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_help.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_help_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_input_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_kms_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_location.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_location_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimedia.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimedia_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediagsttools_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediawidgets.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediawidgets_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_network.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_network_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_networkauth.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_networkauth_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_nfc.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_nfc_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_opengl.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_opengl_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_openglextensions.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_openglextensions_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_packetprotocol_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_platformcompositor_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioning.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioning_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioningquick.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioningquick_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_printsupport.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_printsupport_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_purchasing.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_purchasing_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qml.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qml_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmldebug_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmldevtools_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlmodels.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlmodels_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmltest.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmltest_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlworkerscript.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlworkerscript_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3d.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3d_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dassetimport.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dassetimport_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3drender.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3drender_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3druntimerender.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3druntimerender_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dutils.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dutils_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickcontrols2.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickcontrols2_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickparticles_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickshapes_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quicktemplates2.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quicktemplates2_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickwidgets.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickwidgets_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_remoteobjects.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_remoteobjects_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_repparser.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_repparser_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_scxml.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_scxml_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_sensors.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_sensors_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialbus.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialbus_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialport.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialport_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_service_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_sql.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_sql_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_svg.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_svg_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_testlib.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_testlib_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_texttospeech.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_texttospeech_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_theme_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_uiplugin.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_uitools.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_uitools_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_virtualkeyboard.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_virtualkeyboard_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_vulkan_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_webchannel.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_webchannel_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_websockets.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_websockets_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_webview.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_webview_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_widgets.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_widgets_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xkbcommon_support_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xml.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xml_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xmlpatterns.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_zlib_private.pri \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/qt_functions.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/qt_config.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/linux-rasp-pi4-v3d-g++/qmake.conf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/spec_post.prf \
 		.qmake.stash \
-		../../rpi-qt/qt5.15/mkspecs/features/exclusive_builds.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/toolchain.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/default_pre.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/resolve_config.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/default_post.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/warn_on.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/qt.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/resources_functions.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/resources.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/moc.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/unix/thread.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/qmake_use.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/file_copies.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/testcase_targets.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/exceptions.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/yacc.prf \
-		../../rpi-qt/qt5.15/mkspecs/features/lex.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/exclusive_builds.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/toolchain.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/default_pre.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/resolve_config.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/default_post.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/warn_on.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/qt.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/resources_functions.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/resources.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/moc.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/unix/thread.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/qmake_use.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/file_copies.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/testcase_targets.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/exceptions.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/yacc.prf \
+		/home/julianitow/rpi-qt/qt5.15/mkspecs/features/lex.prf \
 		WebSocketServer.pro
 	$(QMAKE) -o Makefile WebSocketServer.pro
-../../rpi-qt/qt5.15/mkspecs/features/spec_pre.prf:
-../../rpi-qt/qt5.15/mkspecs/common/unix.conf:
-../../rpi-qt/qt5.15/mkspecs/common/linux.conf:
-../../rpi-qt/qt5.15/mkspecs/common/sanitize.conf:
-../../rpi-qt/qt5.15/mkspecs/common/gcc-base.conf:
-../../rpi-qt/qt5.15/mkspecs/common/gcc-base-unix.conf:
-../../rpi-qt/qt5.15/mkspecs/common/g++-base.conf:
-../../rpi-qt/qt5.15/mkspecs/common/g++-unix.conf:
-../../rpi-qt/qt5.15/mkspecs/qdevice.pri:
-../../rpi-qt/qt5.15/mkspecs/features/device_config.prf:
-../../rpi-qt/qt5.15/mkspecs/devices/common/linux_device_pre.conf:
-../../rpi-qt/qt5.15/mkspecs/devices/common/linux_device_post.conf:
-../../rpi-qt/qt5.15/mkspecs/devices/common/linux_arm_device_post.conf:
-../../rpi-qt/qt5.15/mkspecs/qconfig.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3danimation.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3danimation_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dcore.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dcore_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dextras.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dextras_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dinput.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dinput_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dlogic.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dlogic_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquick.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquick_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickanimation.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickanimation_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickextras.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickextras_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickinput.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickinput_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickrender.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickrender_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickscene2d.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickscene2d_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3drender.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_3drender_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_accessibility_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_bluetooth.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_bluetooth_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_bodymovin_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_bootstrap_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_charts.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_charts_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_concurrent.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_concurrent_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_core.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_core_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_datavisualization.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_datavisualization_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_dbus.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_dbus_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_devicediscovery_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_edid_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_egl_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_eglfs_kms_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_eglfsdeviceintegration_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_eventdispatcher_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_fb_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_fontdatabase_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_gamepad.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_gamepad_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_gui.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_gui_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_help.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_help_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_input_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_kms_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_location.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_location_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimedia.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimedia_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediagsttools_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediawidgets.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediawidgets_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_network.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_network_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_networkauth.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_networkauth_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_nfc.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_nfc_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_opengl.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_opengl_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_openglextensions.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_openglextensions_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_packetprotocol_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_platformcompositor_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioning.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioning_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioningquick.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioningquick_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_printsupport.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_printsupport_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_purchasing.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_purchasing_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qml.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qml_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmldebug_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmldevtools_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlmodels.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlmodels_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmltest.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmltest_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlworkerscript.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlworkerscript_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3d.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3d_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dassetimport.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dassetimport_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3drender.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3drender_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3druntimerender.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3druntimerender_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dutils.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dutils_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickcontrols2.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickcontrols2_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickparticles_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickshapes_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quicktemplates2.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quicktemplates2_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickwidgets.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickwidgets_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_remoteobjects.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_remoteobjects_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_repparser.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_repparser_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_scxml.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_scxml_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_sensors.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_sensors_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialbus.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialbus_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialport.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialport_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_service_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_sql.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_sql_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_svg.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_svg_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_testlib.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_testlib_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_texttospeech.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_texttospeech_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_theme_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_uiplugin.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_uitools.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_uitools_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_virtualkeyboard.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_virtualkeyboard_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_vulkan_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_webchannel.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_webchannel_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_websockets.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_websockets_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_webview.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_webview_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_widgets.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_widgets_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xkbcommon_support_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xml.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xml_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xmlpatterns.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_xmlpatterns_private.pri:
-../../rpi-qt/qt5.15/mkspecs/modules/qt_lib_zlib_private.pri:
-../../rpi-qt/qt5.15/mkspecs/features/qt_functions.prf:
-../../rpi-qt/qt5.15/mkspecs/features/qt_config.prf:
-../../rpi-qt/qt5.15/mkspecs/devices/linux-rasp-pi4-v3d-g++/qmake.conf:
-../../rpi-qt/qt5.15/mkspecs/features/spec_post.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/spec_pre.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/common/unix.conf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/common/linux.conf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/common/sanitize.conf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/common/gcc-base.conf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/common/gcc-base-unix.conf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/common/g++-base.conf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/common/g++-unix.conf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/qdevice.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/device_config.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/common/linux_device_pre.conf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/common/linux_device_post.conf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/common/linux_arm_device_post.conf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/qconfig.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3danimation.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3danimation_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dcore.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dcore_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dextras.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dextras_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dinput.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dinput_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dlogic.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dlogic_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquick.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquick_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickanimation.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickanimation_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickextras.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickextras_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickinput.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickinput_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickrender.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickrender_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickscene2d.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3dquickscene2d_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3drender.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_3drender_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_accessibility_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_bluetooth.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_bluetooth_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_bodymovin_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_bootstrap_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_charts.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_charts_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_concurrent.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_concurrent_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_core.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_core_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_datavisualization.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_datavisualization_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_dbus.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_dbus_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_devicediscovery_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_edid_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_egl_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_eglfs_kms_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_eglfsdeviceintegration_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_eventdispatcher_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_fb_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_fontdatabase_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_gamepad.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_gamepad_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_gui.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_gui_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_help.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_help_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_input_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_kms_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_location.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_location_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimedia.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimedia_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediagsttools_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediawidgets.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_multimediawidgets_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_network.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_network_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_networkauth.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_networkauth_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_nfc.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_nfc_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_opengl.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_opengl_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_openglextensions.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_openglextensions_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_packetprotocol_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_platformcompositor_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioning.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioning_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioningquick.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_positioningquick_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_printsupport.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_printsupport_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_purchasing.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_purchasing_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qml.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qml_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmldebug_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmldevtools_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlmodels.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlmodels_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmltest.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmltest_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlworkerscript.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qmlworkerscript_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3d.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3d_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dassetimport.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dassetimport_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3drender.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3drender_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3druntimerender.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3druntimerender_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dutils.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick3dutils_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quick_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickcontrols2.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickcontrols2_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickparticles_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickshapes_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quicktemplates2.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quicktemplates2_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickwidgets.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_quickwidgets_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_remoteobjects.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_remoteobjects_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_repparser.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_repparser_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_scxml.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_scxml_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_sensors.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_sensors_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialbus.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialbus_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialport.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_serialport_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_service_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_sql.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_sql_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_svg.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_svg_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_testlib.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_testlib_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_texttospeech.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_texttospeech_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_theme_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_uiplugin.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_uitools.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_uitools_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_virtualkeyboard.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_virtualkeyboard_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_vulkan_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_webchannel.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_webchannel_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_websockets.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_websockets_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_webview.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_webview_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_widgets.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_widgets_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xkbcommon_support_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xml.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xml_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xmlpatterns.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_xmlpatterns_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/modules/qt_lib_zlib_private.pri:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/qt_functions.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/qt_config.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/linux-rasp-pi4-v3d-g++/qmake.conf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/spec_post.prf:
 .qmake.stash:
-../../rpi-qt/qt5.15/mkspecs/features/exclusive_builds.prf:
-../../rpi-qt/qt5.15/mkspecs/features/toolchain.prf:
-../../rpi-qt/qt5.15/mkspecs/features/default_pre.prf:
-../../rpi-qt/qt5.15/mkspecs/features/resolve_config.prf:
-../../rpi-qt/qt5.15/mkspecs/features/default_post.prf:
-../../rpi-qt/qt5.15/mkspecs/features/warn_on.prf:
-../../rpi-qt/qt5.15/mkspecs/features/qt.prf:
-../../rpi-qt/qt5.15/mkspecs/features/resources_functions.prf:
-../../rpi-qt/qt5.15/mkspecs/features/resources.prf:
-../../rpi-qt/qt5.15/mkspecs/features/moc.prf:
-../../rpi-qt/qt5.15/mkspecs/features/unix/thread.prf:
-../../rpi-qt/qt5.15/mkspecs/features/qmake_use.prf:
-../../rpi-qt/qt5.15/mkspecs/features/file_copies.prf:
-../../rpi-qt/qt5.15/mkspecs/features/testcase_targets.prf:
-../../rpi-qt/qt5.15/mkspecs/features/exceptions.prf:
-../../rpi-qt/qt5.15/mkspecs/features/yacc.prf:
-../../rpi-qt/qt5.15/mkspecs/features/lex.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/exclusive_builds.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/toolchain.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/default_pre.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/resolve_config.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/default_post.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/warn_on.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/qt.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/resources_functions.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/resources.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/moc.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/unix/thread.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/qmake_use.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/file_copies.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/testcase_targets.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/exceptions.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/yacc.prf:
+/home/julianitow/rpi-qt/qt5.15/mkspecs/features/lex.prf:
 WebSocketServer.pro:
 qmake: FORCE
 	@$(QMAKE) -o Makefile WebSocketServer.pro
@@ -662,9 +670,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../../rpi-qt/qt5.15/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents WebSocketServer.h $(DISTDIR)/
-	$(COPY_FILE) --parents WebSocketServer.cpp main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents /home/julianitow/rpi-qt/qt5.15/mkspecs/features/data/dummy.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Alarm.h Brain.h WebSocketServer.h $(DISTDIR)/
+	$(COPY_FILE) --parents Alarm.cpp Brain.cpp WebSocketServer.cpp main.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -693,293 +701,294 @@ compiler_rcc_clean:
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
-moc_predefs.h: ../../rpi-qt/qt5.15/mkspecs/features/data/dummy.cpp
-	/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/bin/arm-linux-gnueabihf-g++ -march=armv8-a -mtune=cortex-a72 -mfpu=crypto-neon-fp-armv8 -mfloat-abi=hard --sysroot=/home/julianitow/rpi-qt/sysroot/ -O2 -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h ../../rpi-qt/qt5.15/mkspecs/features/data/dummy.cpp
+moc_predefs.h: /home/julianitow/rpi-qt/qt5.15/mkspecs/features/data/dummy.cpp
+	/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/bin/arm-linux-gnueabihf-g++ -march=armv8-a -mtune=cortex-a72 -mfpu=crypto-neon-fp-armv8 -mfloat-abi=hard --sysroot=/home/julianitow/rpi-qt/sysroot/ -O2 -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /home/julianitow/rpi-qt/qt5.15/mkspecs/features/data/dummy.cpp
 
 compiler_moc_header_make_all: moc_WebSocketServer.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_WebSocketServer.cpp
 moc_WebSocketServer.cpp: WebSocketServer.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/QtWebSockets \
-		../../rpi-qt/qt5.15/include/QtWebSockets/QtWebSocketsDepends \
-		../../rpi-qt/qt5.15/include/QtCore/QtCore \
-		../../rpi-qt/qt5.15/include/QtCore/QtCoreDepends \
-		../../rpi-qt/qt5.15/include/QtCore/qglobal.h \
-		../../rpi-qt/qt5.15/include/QtCore/qconfig-bootstrapped.h \
-		../../rpi-qt/qt5.15/include/QtCore/qconfig.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtcore-config.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsystemdetection.h \
-		../../rpi-qt/qt5.15/include/QtCore/qprocessordetection.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcompilerdetection.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtypeinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsysinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlogging.h \
-		../../rpi-qt/qt5.15/include/QtCore/qflags.h \
-		../../rpi-qt/qt5.15/include/QtCore/qatomic.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbasicatomic.h \
-		../../rpi-qt/qt5.15/include/QtCore/qatomic_bootstrap.h \
-		../../rpi-qt/qt5.15/include/QtCore/qgenericatomic.h \
-		../../rpi-qt/qt5.15/include/QtCore/qatomic_cxx11.h \
-		../../rpi-qt/qt5.15/include/QtCore/qatomic_msvc.h \
-		../../rpi-qt/qt5.15/include/QtCore/qglobalstatic.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmutex.h \
-		../../rpi-qt/qt5.15/include/QtCore/qnumeric.h \
-		../../rpi-qt/qt5.15/include/QtCore/qversiontagging.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractanimation.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobject.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobjectdefs.h \
-		../../rpi-qt/qt5.15/include/QtCore/qnamespace.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobjectdefs_impl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstring.h \
-		../../rpi-qt/qt5.15/include/QtCore/qchar.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbytearray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qrefcount.h \
-		../../rpi-qt/qt5.15/include/QtCore/qarraydata.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringliteral.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringalgorithms.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringview.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringbuilder.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlist.h \
-		../../rpi-qt/qt5.15/include/QtCore/qalgorithms.h \
-		../../rpi-qt/qt5.15/include/QtCore/qiterator.h \
-		../../rpi-qt/qt5.15/include/QtCore/qhashfunctions.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpair.h \
-		../../rpi-qt/qt5.15/include/QtCore/qvector.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcontainertools_impl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpoint.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbytearraylist.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringlist.h \
-		../../rpi-qt/qt5.15/include/QtCore/qregexp.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringmatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcoreevent.h \
-		../../rpi-qt/qt5.15/include/QtCore/qscopedpointer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmetatype.h \
-		../../rpi-qt/qt5.15/include/QtCore/qvarlengtharray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcontainerfwd.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobject_impl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstracteventdispatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qeventloop.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractitemmodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qvariant.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmap.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdebug.h \
-		../../rpi-qt/qt5.15/include/QtCore/qhash.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtextstream.h \
-		../../rpi-qt/qt5.15/include/QtCore/qiodevice.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlocale.h \
-		../../rpi-qt/qt5.15/include/QtCore/qshareddata.h \
-		../../rpi-qt/qt5.15/include/QtCore/qset.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcontiguouscache.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsharedpointer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsharedpointer_impl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractnativeeventfilter.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractstate.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstracttransition.h \
-		../../rpi-qt/qt5.15/include/QtCore/qanimationgroup.h \
-		../../rpi-qt/qt5.15/include/QtCore/qarraydataops.h \
-		../../rpi-qt/qt5.15/include/QtCore/qarraydatapointer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbasictimer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbitarray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbuffer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbytearraymatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcache.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcalendar.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborarray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborvalue.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdatetime.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborcommon.h \
-		../../rpi-qt/qt5.15/include/QtCore/qregularexpression.h \
-		../../rpi-qt/qt5.15/include/QtCore/qurl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qurlquery.h \
-		../../rpi-qt/qt5.15/include/QtCore/quuid.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcbormap.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborstream.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborstreamreader.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfloat16.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborstreamwriter.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcollator.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcommandlineoption.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcommandlineparser.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcoreapplication.h \
-		../../rpi-qt/qt5.15/include/QtCore/qconcatenatetablesproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcryptographichash.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdatastream.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdeadlinetimer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qelapsedtimer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdir.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfileinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfile.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfiledevice.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdiriterator.h \
-		../../rpi-qt/qt5.15/include/QtCore/qeasingcurve.h \
-		../../rpi-qt/qt5.15/include/QtCore/qendian.h \
-		../../rpi-qt/qt5.15/include/QtCore/qeventtransition.h \
-		../../rpi-qt/qt5.15/include/QtCore/qexception.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfactoryinterface.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfileselector.h \
-		../../rpi-qt/qt5.15/include/QtCore/QObject \
-		../../rpi-qt/qt5.15/include/QtCore/QStringList \
-		../../rpi-qt/qt5.15/include/QtCore/qfilesystemwatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfinalstate.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfuture.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfutureinterface.h \
-		../../rpi-qt/qt5.15/include/QtCore/qrunnable.h \
-		../../rpi-qt/qt5.15/include/QtCore/qresultstore.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfuturesynchronizer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfuturewatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qhistorystate.h \
-		../../rpi-qt/qt5.15/include/QtCore/qidentityproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qisenum.h \
-		../../rpi-qt/qt5.15/include/QtCore/qitemselectionmodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qjsonarray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qjsonvalue.h \
-		../../rpi-qt/qt5.15/include/QtCore/qjsondocument.h \
-		../../rpi-qt/qt5.15/include/QtCore/qjsonobject.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlibrary.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlibraryinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qversionnumber.h \
-		../../rpi-qt/qt5.15/include/QtCore/qline.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlinkedlist.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlockfile.h \
-		../../rpi-qt/qt5.15/include/QtCore/qloggingcategory.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmargins.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmath.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmessageauthenticationcode.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmetaobject.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmimedata.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmimedatabase.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmimetype.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobjectcleanuphandler.h \
-		../../rpi-qt/qt5.15/include/QtCore/qoperatingsystemversion.h \
-		../../rpi-qt/qt5.15/include/QtCore/qparallelanimationgroup.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpauseanimation.h \
-		../../rpi-qt/qt5.15/include/QtCore/qplugin.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpointer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpluginloader.h \
-		../../rpi-qt/qt5.15/include/QtCore/qprocess.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpropertyanimation.h \
-		../../rpi-qt/qt5.15/include/QtCore/qvariantanimation.h \
-		../../rpi-qt/qt5.15/include/QtCore/qqueue.h \
-		../../rpi-qt/qt5.15/include/QtCore/qrandom.h \
-		../../rpi-qt/qt5.15/include/QtCore/qreadwritelock.h \
-		../../rpi-qt/qt5.15/include/QtCore/qrect.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsize.h \
-		../../rpi-qt/qt5.15/include/QtCore/qresource.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsavefile.h \
-		../../rpi-qt/qt5.15/include/QtCore/qscopedvaluerollback.h \
-		../../rpi-qt/qt5.15/include/QtCore/qscopeguard.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsemaphore.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsequentialanimationgroup.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsettings.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsharedmemory.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsignalmapper.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsignaltransition.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsocketnotifier.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsortfilterproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstack.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstandardpaths.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstate.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstatemachine.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstorageinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringlistmodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsystemsemaphore.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtemporarydir.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtemporaryfile.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtextboundaryfinder.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtextcodec.h \
-		../../rpi-qt/qt5.15/include/QtCore/qthread.h \
-		../../rpi-qt/qt5.15/include/QtCore/qthreadpool.h \
-		../../rpi-qt/qt5.15/include/QtCore/qthreadstorage.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtimeline.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtimer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtimezone.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtranslator.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtransposeproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtypetraits.h \
-		../../rpi-qt/qt5.15/include/QtCore/qwaitcondition.h \
-		../../rpi-qt/qt5.15/include/QtCore/QDeadlineTimer \
-		../../rpi-qt/qt5.15/include/QtCore/qwineventnotifier.h \
-		../../rpi-qt/qt5.15/include/QtCore/qxmlstream.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtcoreversion.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QtNetwork \
-		../../rpi-qt/qt5.15/include/QtNetwork/QtNetworkDepends \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtnetworkglobal.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtnetwork-config.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qabstractnetworkcache.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkrequest.h \
-		../../rpi-qt/qt5.15/include/QtCore/QSharedDataPointer \
-		../../rpi-qt/qt5.15/include/QtCore/QString \
-		../../rpi-qt/qt5.15/include/QtCore/QUrl \
-		../../rpi-qt/qt5.15/include/QtCore/QVariant \
-		../../rpi-qt/qt5.15/include/QtNetwork/qabstractsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qauthenticator.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qdnslookup.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qdtls.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtcpsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslerror.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslcertificate.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qssl.h \
-		../../rpi-qt/qt5.15/include/QtCore/QFlags \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhostaddress.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhostinfo.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhstspolicy.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhttp2configuration.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhttpmultipart.h \
-		../../rpi-qt/qt5.15/include/QtCore/QByteArray \
-		../../rpi-qt/qt5.15/include/QtCore/QIODevice \
-		../../rpi-qt/qt5.15/include/QtNetwork/QNetworkRequest \
-		../../rpi-qt/qt5.15/include/QtNetwork/qlocalserver.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qlocalsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkaccessmanager.h \
-		../../rpi-qt/qt5.15/include/QtCore/QVector \
-		../../rpi-qt/qt5.15/include/QtNetwork/QSslConfiguration \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslconfiguration.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QSslPreSharedKeyAuthenticator \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslpresharedkeyauthenticator.h \
-		../../rpi-qt/qt5.15/include/QtCore/QMetaType \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkconfigmanager.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkconfiguration.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkcookie.h \
-		../../rpi-qt/qt5.15/include/QtCore/QList \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkcookiejar.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkdatagram.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkdiskcache.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkinterface.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkproxy.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkreply.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QNetworkAccessManager \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworksession.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qocspresponse.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qpassworddigestor.h \
-		../../rpi-qt/qt5.15/include/QtCore/QCryptographicHash \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsctpserver.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtcpserver.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsctpsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslcertificateextension.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslcipher.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qssldiffiehellmanparameters.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslellipticcurve.h \
-		../../rpi-qt/qt5.15/include/QtCore/QHash \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslkey.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qudpsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtnetworkversion.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qmaskgenerator.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsockets_global.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QAbstractSocket \
-		../../rpi-qt/qt5.15/include/QtNetwork/QNetworkProxy \
-		../../rpi-qt/qt5.15/include/QtNetwork/QSslError \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsocketprotocol.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsocketcorsauthenticator.h \
-		../../rpi-qt/qt5.15/include/QtCore/QScopedPointer \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsocketserver.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QHostAddress \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qtwebsocketsversion.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/QtWebSockets \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/QtWebSocketsDepends \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QtCore \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QtCoreDepends \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qglobal.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qconfig-bootstrapped.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qconfig.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtcore-config.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsystemdetection.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qprocessordetection.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcompilerdetection.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtypeinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsysinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlogging.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qflags.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbasicatomic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic_bootstrap.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qgenericatomic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic_cxx11.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic_msvc.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qglobalstatic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmutex.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qnumeric.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qversiontagging.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractanimation.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobject.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobjectdefs.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qnamespace.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobjectdefs_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstring.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qchar.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbytearray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qrefcount.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qarraydata.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringliteral.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringalgorithms.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringview.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringbuilder.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qalgorithms.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qiterator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qhashfunctions.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpair.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvector.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcontainertools_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpoint.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbytearraylist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringlist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qregexp.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringmatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcoreevent.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qscopedpointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmetatype.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvarlengtharray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcontainerfwd.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobject_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstracteventdispatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qeventloop.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractitemmodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvariant.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmap.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdebug.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qhash.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtextstream.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qiodevice.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlocale.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qshareddata.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qset.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcontiguouscache.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsharedpointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsharedpointer_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractnativeeventfilter.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractstate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstracttransition.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qanimationgroup.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qarraydataops.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qarraydatapointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbasictimer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbitarray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbuffer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbytearraymatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcache.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcalendar.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborarray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborvalue.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdatetime.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborcommon.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qregularexpression.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qurl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qurlquery.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/quuid.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcbormap.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborstream.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborstreamreader.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfloat16.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborstreamwriter.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcollator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcommandlineoption.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcommandlineparser.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcoreapplication.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qconcatenatetablesproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcryptographichash.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdatastream.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdeadlinetimer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qelapsedtimer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdir.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfileinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfile.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfiledevice.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdiriterator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qeasingcurve.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qendian.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qeventtransition.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qexception.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfactoryinterface.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfileselector.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QObject \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QStringList \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfilesystemwatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfinalstate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfuture.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfutureinterface.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qrunnable.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qresultstore.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfuturesynchronizer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfuturewatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qhistorystate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qidentityproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qisenum.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qitemselectionmodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qjsonarray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qjsonvalue.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qjsondocument.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qjsonobject.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlibrary.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlibraryinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qversionnumber.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qline.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlinkedlist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlockfile.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qloggingcategory.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmargins.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmath.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmessageauthenticationcode.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmetaobject.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmimedata.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmimedatabase.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmimetype.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobjectcleanuphandler.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qoperatingsystemversion.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qparallelanimationgroup.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpauseanimation.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qplugin.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpluginloader.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qprocess.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpropertyanimation.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvariantanimation.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qqueue.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qrandom.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qreadwritelock.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qrect.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsize.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qresource.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsavefile.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qscopedvaluerollback.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qscopeguard.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsemaphore.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsequentialanimationgroup.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsettings.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsharedmemory.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsignalmapper.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsignaltransition.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsocketnotifier.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsortfilterproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstack.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstandardpaths.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstatemachine.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstorageinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringlistmodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsystemsemaphore.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtemporarydir.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtemporaryfile.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtextboundaryfinder.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtextcodec.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qthread.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qthreadpool.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qthreadstorage.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtimeline.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtimer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtimezone.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtranslator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtransposeproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtypetraits.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qwaitcondition.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QDeadlineTimer \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qwineventnotifier.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qxmlstream.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtcoreversion.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QtNetwork \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QtNetworkDepends \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtnetworkglobal.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtnetwork-config.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qabstractnetworkcache.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkrequest.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QSharedDataPointer \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QString \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QUrl \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QVariant \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qabstractsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qauthenticator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qdnslookup.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qdtls.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtcpsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslerror.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslcertificate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qssl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QFlags \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhostaddress.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhostinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhstspolicy.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhttp2configuration.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhttpmultipart.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QByteArray \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QIODevice \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QNetworkRequest \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qlocalserver.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qlocalsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkaccessmanager.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QVector \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QSslConfiguration \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslconfiguration.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QMetaType \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkconfigmanager.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkconfiguration.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkcookie.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QList \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkcookiejar.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkdatagram.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkdiskcache.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkinterface.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkproxy.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkreply.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QNetworkAccessManager \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworksession.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qocspresponse.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qpassworddigestor.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QCryptographicHash \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsctpserver.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtcpserver.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsctpsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslcertificateextension.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslcipher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qssldiffiehellmanparameters.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslellipticcurve.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QHash \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslkey.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qudpsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtnetworkversion.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qmaskgenerator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsockets_global.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QAbstractSocket \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QNetworkProxy \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QSslError \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocketprotocol.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocketcorsauthenticator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QScopedPointer \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocketserver.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QHostAddress \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qtwebsocketsversion.h \
+		Alarm.h \
 		moc_predefs.h \
-		../../rpi-qt/qt5.15/bin/moc
-	/home/julianitow/rpi-qt/qt5.15/bin/moc $(DEFINES) --include /home/julianitow/work/WebSocketServerQt/moc_predefs.h -I/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/linux-rasp-pi4-v3d-g++ -I/home/julianitow/work/WebSocketServerQt -I/home/julianitow/rpi-qt/qt5.15/include -I/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets -I/home/julianitow/rpi-qt/qt5.15/include/QtNetwork -I/home/julianitow/rpi-qt/qt5.15/include/QtCore -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/arm-linux-gnueabihf/include/c++/8.3.0 -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/arm-linux-gnueabihf/include/c++/8.3.0/arm-linux-gnueabihf -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/arm-linux-gnueabihf/include/c++/8.3.0/backward -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/lib/gcc/arm-linux-gnueabihf/8.3.0/include -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/lib/gcc/arm-linux-gnueabihf/8.3.0/include-fixed -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/arm-linux-gnueabihf/include -I/home/julianitow/rpi-qt/sysroot/usr/include WebSocketServer.h -o moc_WebSocketServer.cpp
+		/home/julianitow/rpi-qt/qt5.15/bin/moc
+	/home/julianitow/rpi-qt/qt5.15/bin/moc $(DEFINES) --include /mnt/hgfs/guill/work/WebSocketServerQt/moc_predefs.h -I/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/linux-rasp-pi4-v3d-g++ -I/mnt/hgfs/guill/work/WebSocketServerQt -I/home/julianitow/rpi-qt/qt5.15/include -I/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets -I/home/julianitow/rpi-qt/qt5.15/include/QtNetwork -I/home/julianitow/rpi-qt/qt5.15/include/QtCore -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/arm-linux-gnueabihf/include/c++/8.3.0 -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/arm-linux-gnueabihf/include/c++/8.3.0/arm-linux-gnueabihf -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/arm-linux-gnueabihf/include/c++/8.3.0/backward -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/lib/gcc/arm-linux-gnueabihf/8.3.0/include -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/lib/gcc/arm-linux-gnueabihf/8.3.0/include-fixed -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/arm-linux-gnueabihf/include -I/home/julianitow/rpi-qt/sysroot/usr/include WebSocketServer.h -o moc_WebSocketServer.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -995,565 +1004,573 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 ####### Compile
 
+Alarm.o: Alarm.cpp Alarm.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Alarm.o Alarm.cpp
+
+Brain.o: Brain.cpp Brain.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Brain.o Brain.cpp
+
 WebSocketServer.o: WebSocketServer.cpp WebSocketServer.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/QtWebSockets \
-		../../rpi-qt/qt5.15/include/QtWebSockets/QtWebSocketsDepends \
-		../../rpi-qt/qt5.15/include/QtCore/QtCore \
-		../../rpi-qt/qt5.15/include/QtCore/QtCoreDepends \
-		../../rpi-qt/qt5.15/include/QtCore/qglobal.h \
-		../../rpi-qt/qt5.15/include/QtCore/qconfig-bootstrapped.h \
-		../../rpi-qt/qt5.15/include/QtCore/qconfig.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtcore-config.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsystemdetection.h \
-		../../rpi-qt/qt5.15/include/QtCore/qprocessordetection.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcompilerdetection.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtypeinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsysinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlogging.h \
-		../../rpi-qt/qt5.15/include/QtCore/qflags.h \
-		../../rpi-qt/qt5.15/include/QtCore/qatomic.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbasicatomic.h \
-		../../rpi-qt/qt5.15/include/QtCore/qatomic_bootstrap.h \
-		../../rpi-qt/qt5.15/include/QtCore/qgenericatomic.h \
-		../../rpi-qt/qt5.15/include/QtCore/qatomic_cxx11.h \
-		../../rpi-qt/qt5.15/include/QtCore/qatomic_msvc.h \
-		../../rpi-qt/qt5.15/include/QtCore/qglobalstatic.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmutex.h \
-		../../rpi-qt/qt5.15/include/QtCore/qnumeric.h \
-		../../rpi-qt/qt5.15/include/QtCore/qversiontagging.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractanimation.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobject.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobjectdefs.h \
-		../../rpi-qt/qt5.15/include/QtCore/qnamespace.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobjectdefs_impl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstring.h \
-		../../rpi-qt/qt5.15/include/QtCore/qchar.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbytearray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qrefcount.h \
-		../../rpi-qt/qt5.15/include/QtCore/qarraydata.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringliteral.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringalgorithms.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringview.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringbuilder.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlist.h \
-		../../rpi-qt/qt5.15/include/QtCore/qalgorithms.h \
-		../../rpi-qt/qt5.15/include/QtCore/qiterator.h \
-		../../rpi-qt/qt5.15/include/QtCore/qhashfunctions.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpair.h \
-		../../rpi-qt/qt5.15/include/QtCore/qvector.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcontainertools_impl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpoint.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbytearraylist.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringlist.h \
-		../../rpi-qt/qt5.15/include/QtCore/qregexp.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringmatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcoreevent.h \
-		../../rpi-qt/qt5.15/include/QtCore/qscopedpointer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmetatype.h \
-		../../rpi-qt/qt5.15/include/QtCore/qvarlengtharray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcontainerfwd.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobject_impl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstracteventdispatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qeventloop.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractitemmodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qvariant.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmap.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdebug.h \
-		../../rpi-qt/qt5.15/include/QtCore/qhash.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtextstream.h \
-		../../rpi-qt/qt5.15/include/QtCore/qiodevice.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlocale.h \
-		../../rpi-qt/qt5.15/include/QtCore/qshareddata.h \
-		../../rpi-qt/qt5.15/include/QtCore/qset.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcontiguouscache.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsharedpointer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsharedpointer_impl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractnativeeventfilter.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractstate.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstracttransition.h \
-		../../rpi-qt/qt5.15/include/QtCore/qanimationgroup.h \
-		../../rpi-qt/qt5.15/include/QtCore/qarraydataops.h \
-		../../rpi-qt/qt5.15/include/QtCore/qarraydatapointer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbasictimer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbitarray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbuffer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbytearraymatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcache.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcalendar.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborarray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborvalue.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdatetime.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborcommon.h \
-		../../rpi-qt/qt5.15/include/QtCore/qregularexpression.h \
-		../../rpi-qt/qt5.15/include/QtCore/qurl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qurlquery.h \
-		../../rpi-qt/qt5.15/include/QtCore/quuid.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcbormap.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborstream.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborstreamreader.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfloat16.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborstreamwriter.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcollator.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcommandlineoption.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcommandlineparser.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcoreapplication.h \
-		../../rpi-qt/qt5.15/include/QtCore/qconcatenatetablesproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcryptographichash.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdatastream.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdeadlinetimer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qelapsedtimer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdir.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfileinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfile.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfiledevice.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdiriterator.h \
-		../../rpi-qt/qt5.15/include/QtCore/qeasingcurve.h \
-		../../rpi-qt/qt5.15/include/QtCore/qendian.h \
-		../../rpi-qt/qt5.15/include/QtCore/qeventtransition.h \
-		../../rpi-qt/qt5.15/include/QtCore/qexception.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfactoryinterface.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfileselector.h \
-		../../rpi-qt/qt5.15/include/QtCore/QObject \
-		../../rpi-qt/qt5.15/include/QtCore/QStringList \
-		../../rpi-qt/qt5.15/include/QtCore/qfilesystemwatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfinalstate.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfuture.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfutureinterface.h \
-		../../rpi-qt/qt5.15/include/QtCore/qrunnable.h \
-		../../rpi-qt/qt5.15/include/QtCore/qresultstore.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfuturesynchronizer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfuturewatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qhistorystate.h \
-		../../rpi-qt/qt5.15/include/QtCore/qidentityproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qisenum.h \
-		../../rpi-qt/qt5.15/include/QtCore/qitemselectionmodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qjsonarray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qjsonvalue.h \
-		../../rpi-qt/qt5.15/include/QtCore/qjsondocument.h \
-		../../rpi-qt/qt5.15/include/QtCore/qjsonobject.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlibrary.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlibraryinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qversionnumber.h \
-		../../rpi-qt/qt5.15/include/QtCore/qline.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlinkedlist.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlockfile.h \
-		../../rpi-qt/qt5.15/include/QtCore/qloggingcategory.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmargins.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmath.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmessageauthenticationcode.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmetaobject.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmimedata.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmimedatabase.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmimetype.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobjectcleanuphandler.h \
-		../../rpi-qt/qt5.15/include/QtCore/qoperatingsystemversion.h \
-		../../rpi-qt/qt5.15/include/QtCore/qparallelanimationgroup.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpauseanimation.h \
-		../../rpi-qt/qt5.15/include/QtCore/qplugin.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpointer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpluginloader.h \
-		../../rpi-qt/qt5.15/include/QtCore/qprocess.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpropertyanimation.h \
-		../../rpi-qt/qt5.15/include/QtCore/qvariantanimation.h \
-		../../rpi-qt/qt5.15/include/QtCore/qqueue.h \
-		../../rpi-qt/qt5.15/include/QtCore/qrandom.h \
-		../../rpi-qt/qt5.15/include/QtCore/qreadwritelock.h \
-		../../rpi-qt/qt5.15/include/QtCore/qrect.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsize.h \
-		../../rpi-qt/qt5.15/include/QtCore/qresource.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsavefile.h \
-		../../rpi-qt/qt5.15/include/QtCore/qscopedvaluerollback.h \
-		../../rpi-qt/qt5.15/include/QtCore/qscopeguard.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsemaphore.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsequentialanimationgroup.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsettings.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsharedmemory.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsignalmapper.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsignaltransition.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsocketnotifier.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsortfilterproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstack.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstandardpaths.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstate.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstatemachine.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstorageinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringlistmodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsystemsemaphore.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtemporarydir.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtemporaryfile.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtextboundaryfinder.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtextcodec.h \
-		../../rpi-qt/qt5.15/include/QtCore/qthread.h \
-		../../rpi-qt/qt5.15/include/QtCore/qthreadpool.h \
-		../../rpi-qt/qt5.15/include/QtCore/qthreadstorage.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtimeline.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtimer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtimezone.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtranslator.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtransposeproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtypetraits.h \
-		../../rpi-qt/qt5.15/include/QtCore/qwaitcondition.h \
-		../../rpi-qt/qt5.15/include/QtCore/QDeadlineTimer \
-		../../rpi-qt/qt5.15/include/QtCore/qwineventnotifier.h \
-		../../rpi-qt/qt5.15/include/QtCore/qxmlstream.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtcoreversion.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QtNetwork \
-		../../rpi-qt/qt5.15/include/QtNetwork/QtNetworkDepends \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtnetworkglobal.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtnetwork-config.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qabstractnetworkcache.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkrequest.h \
-		../../rpi-qt/qt5.15/include/QtCore/QSharedDataPointer \
-		../../rpi-qt/qt5.15/include/QtCore/QString \
-		../../rpi-qt/qt5.15/include/QtCore/QUrl \
-		../../rpi-qt/qt5.15/include/QtCore/QVariant \
-		../../rpi-qt/qt5.15/include/QtNetwork/qabstractsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qauthenticator.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qdnslookup.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qdtls.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtcpsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslerror.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslcertificate.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qssl.h \
-		../../rpi-qt/qt5.15/include/QtCore/QFlags \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhostaddress.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhostinfo.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhstspolicy.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhttp2configuration.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhttpmultipart.h \
-		../../rpi-qt/qt5.15/include/QtCore/QByteArray \
-		../../rpi-qt/qt5.15/include/QtCore/QIODevice \
-		../../rpi-qt/qt5.15/include/QtNetwork/QNetworkRequest \
-		../../rpi-qt/qt5.15/include/QtNetwork/qlocalserver.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qlocalsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkaccessmanager.h \
-		../../rpi-qt/qt5.15/include/QtCore/QVector \
-		../../rpi-qt/qt5.15/include/QtNetwork/QSslConfiguration \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslconfiguration.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QSslPreSharedKeyAuthenticator \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslpresharedkeyauthenticator.h \
-		../../rpi-qt/qt5.15/include/QtCore/QMetaType \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkconfigmanager.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkconfiguration.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkcookie.h \
-		../../rpi-qt/qt5.15/include/QtCore/QList \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkcookiejar.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkdatagram.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkdiskcache.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkinterface.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkproxy.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkreply.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QNetworkAccessManager \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworksession.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qocspresponse.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qpassworddigestor.h \
-		../../rpi-qt/qt5.15/include/QtCore/QCryptographicHash \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsctpserver.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtcpserver.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsctpsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslcertificateextension.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslcipher.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qssldiffiehellmanparameters.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslellipticcurve.h \
-		../../rpi-qt/qt5.15/include/QtCore/QHash \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslkey.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qudpsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtnetworkversion.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qmaskgenerator.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsockets_global.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QAbstractSocket \
-		../../rpi-qt/qt5.15/include/QtNetwork/QNetworkProxy \
-		../../rpi-qt/qt5.15/include/QtNetwork/QSslError \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsocketprotocol.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsocketcorsauthenticator.h \
-		../../rpi-qt/qt5.15/include/QtCore/QScopedPointer \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsocketserver.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QHostAddress \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qtwebsocketsversion.h
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/QtWebSockets \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/QtWebSocketsDepends \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QtCore \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QtCoreDepends \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qglobal.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qconfig-bootstrapped.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qconfig.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtcore-config.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsystemdetection.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qprocessordetection.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcompilerdetection.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtypeinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsysinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlogging.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qflags.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbasicatomic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic_bootstrap.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qgenericatomic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic_cxx11.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic_msvc.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qglobalstatic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmutex.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qnumeric.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qversiontagging.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractanimation.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobject.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobjectdefs.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qnamespace.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobjectdefs_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstring.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qchar.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbytearray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qrefcount.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qarraydata.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringliteral.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringalgorithms.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringview.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringbuilder.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qalgorithms.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qiterator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qhashfunctions.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpair.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvector.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcontainertools_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpoint.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbytearraylist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringlist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qregexp.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringmatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcoreevent.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qscopedpointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmetatype.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvarlengtharray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcontainerfwd.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobject_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstracteventdispatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qeventloop.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractitemmodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvariant.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmap.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdebug.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qhash.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtextstream.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qiodevice.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlocale.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qshareddata.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qset.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcontiguouscache.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsharedpointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsharedpointer_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractnativeeventfilter.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractstate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstracttransition.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qanimationgroup.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qarraydataops.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qarraydatapointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbasictimer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbitarray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbuffer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbytearraymatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcache.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcalendar.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborarray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborvalue.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdatetime.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborcommon.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qregularexpression.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qurl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qurlquery.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/quuid.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcbormap.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborstream.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborstreamreader.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfloat16.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborstreamwriter.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcollator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcommandlineoption.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcommandlineparser.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcoreapplication.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qconcatenatetablesproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcryptographichash.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdatastream.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdeadlinetimer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qelapsedtimer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdir.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfileinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfile.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfiledevice.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdiriterator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qeasingcurve.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qendian.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qeventtransition.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qexception.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfactoryinterface.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfileselector.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QObject \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QStringList \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfilesystemwatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfinalstate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfuture.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfutureinterface.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qrunnable.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qresultstore.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfuturesynchronizer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfuturewatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qhistorystate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qidentityproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qisenum.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qitemselectionmodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qjsonarray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qjsonvalue.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qjsondocument.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qjsonobject.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlibrary.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlibraryinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qversionnumber.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qline.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlinkedlist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlockfile.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qloggingcategory.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmargins.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmath.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmessageauthenticationcode.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmetaobject.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmimedata.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmimedatabase.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmimetype.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobjectcleanuphandler.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qoperatingsystemversion.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qparallelanimationgroup.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpauseanimation.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qplugin.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpluginloader.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qprocess.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpropertyanimation.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvariantanimation.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qqueue.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qrandom.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qreadwritelock.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qrect.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsize.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qresource.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsavefile.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qscopedvaluerollback.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qscopeguard.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsemaphore.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsequentialanimationgroup.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsettings.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsharedmemory.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsignalmapper.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsignaltransition.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsocketnotifier.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsortfilterproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstack.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstandardpaths.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstatemachine.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstorageinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringlistmodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsystemsemaphore.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtemporarydir.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtemporaryfile.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtextboundaryfinder.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtextcodec.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qthread.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qthreadpool.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qthreadstorage.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtimeline.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtimer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtimezone.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtranslator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtransposeproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtypetraits.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qwaitcondition.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QDeadlineTimer \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qwineventnotifier.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qxmlstream.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtcoreversion.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QtNetwork \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QtNetworkDepends \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtnetworkglobal.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtnetwork-config.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qabstractnetworkcache.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkrequest.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QSharedDataPointer \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QString \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QUrl \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QVariant \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qabstractsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qauthenticator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qdnslookup.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qdtls.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtcpsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslerror.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslcertificate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qssl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QFlags \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhostaddress.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhostinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhstspolicy.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhttp2configuration.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhttpmultipart.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QByteArray \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QIODevice \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QNetworkRequest \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qlocalserver.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qlocalsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkaccessmanager.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QVector \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QSslConfiguration \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslconfiguration.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QMetaType \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkconfigmanager.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkconfiguration.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkcookie.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QList \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkcookiejar.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkdatagram.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkdiskcache.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkinterface.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkproxy.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkreply.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QNetworkAccessManager \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworksession.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qocspresponse.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qpassworddigestor.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QCryptographicHash \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsctpserver.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtcpserver.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsctpsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslcertificateextension.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslcipher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qssldiffiehellmanparameters.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslellipticcurve.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QHash \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslkey.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qudpsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtnetworkversion.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qmaskgenerator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsockets_global.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QAbstractSocket \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QNetworkProxy \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QSslError \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocketprotocol.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocketcorsauthenticator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QScopedPointer \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocketserver.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QHostAddress \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qtwebsocketsversion.h \
+		Alarm.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o WebSocketServer.o WebSocketServer.cpp
 
-main.o: main.cpp ../../rpi-qt/qt5.15/include/QtCore/QCoreApplication \
-		../../rpi-qt/qt5.15/include/QtCore/qcoreapplication.h \
-		../../rpi-qt/qt5.15/include/QtCore/qglobal.h \
-		../../rpi-qt/qt5.15/include/QtCore/qconfig-bootstrapped.h \
-		../../rpi-qt/qt5.15/include/QtCore/qconfig.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtcore-config.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsystemdetection.h \
-		../../rpi-qt/qt5.15/include/QtCore/qprocessordetection.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcompilerdetection.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtypeinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsysinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlogging.h \
-		../../rpi-qt/qt5.15/include/QtCore/qflags.h \
-		../../rpi-qt/qt5.15/include/QtCore/qatomic.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbasicatomic.h \
-		../../rpi-qt/qt5.15/include/QtCore/qatomic_bootstrap.h \
-		../../rpi-qt/qt5.15/include/QtCore/qgenericatomic.h \
-		../../rpi-qt/qt5.15/include/QtCore/qatomic_cxx11.h \
-		../../rpi-qt/qt5.15/include/QtCore/qatomic_msvc.h \
-		../../rpi-qt/qt5.15/include/QtCore/qglobalstatic.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmutex.h \
-		../../rpi-qt/qt5.15/include/QtCore/qnumeric.h \
-		../../rpi-qt/qt5.15/include/QtCore/qversiontagging.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstring.h \
-		../../rpi-qt/qt5.15/include/QtCore/qchar.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbytearray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qrefcount.h \
-		../../rpi-qt/qt5.15/include/QtCore/qnamespace.h \
-		../../rpi-qt/qt5.15/include/QtCore/qarraydata.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringliteral.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringalgorithms.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringview.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringbuilder.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobject.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobjectdefs.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobjectdefs_impl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlist.h \
-		../../rpi-qt/qt5.15/include/QtCore/qalgorithms.h \
-		../../rpi-qt/qt5.15/include/QtCore/qiterator.h \
-		../../rpi-qt/qt5.15/include/QtCore/qhashfunctions.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpair.h \
-		../../rpi-qt/qt5.15/include/QtCore/qvector.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcontainertools_impl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpoint.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbytearraylist.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringlist.h \
-		../../rpi-qt/qt5.15/include/QtCore/qregexp.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringmatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcoreevent.h \
-		../../rpi-qt/qt5.15/include/QtCore/qscopedpointer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmetatype.h \
-		../../rpi-qt/qt5.15/include/QtCore/qvarlengtharray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcontainerfwd.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobject_impl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qeventloop.h \
+main.o: main.cpp /home/julianitow/rpi-qt/qt5.15/include/QtCore/QCoreApplication \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcoreapplication.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qglobal.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qconfig-bootstrapped.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qconfig.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtcore-config.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsystemdetection.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qprocessordetection.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcompilerdetection.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtypeinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsysinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlogging.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qflags.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbasicatomic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic_bootstrap.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qgenericatomic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic_cxx11.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic_msvc.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qglobalstatic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmutex.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qnumeric.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qversiontagging.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstring.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qchar.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbytearray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qrefcount.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qnamespace.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qarraydata.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringliteral.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringalgorithms.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringview.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringbuilder.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobject.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobjectdefs.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobjectdefs_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qalgorithms.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qiterator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qhashfunctions.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpair.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvector.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcontainertools_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpoint.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbytearraylist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringlist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qregexp.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringmatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcoreevent.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qscopedpointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmetatype.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvarlengtharray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcontainerfwd.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobject_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qeventloop.h \
 		WebSocketServer.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/QtWebSockets \
-		../../rpi-qt/qt5.15/include/QtWebSockets/QtWebSocketsDepends \
-		../../rpi-qt/qt5.15/include/QtCore/QtCore \
-		../../rpi-qt/qt5.15/include/QtCore/QtCoreDepends \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractanimation.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstracteventdispatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractitemmodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qvariant.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmap.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdebug.h \
-		../../rpi-qt/qt5.15/include/QtCore/qhash.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtextstream.h \
-		../../rpi-qt/qt5.15/include/QtCore/qiodevice.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlocale.h \
-		../../rpi-qt/qt5.15/include/QtCore/qshareddata.h \
-		../../rpi-qt/qt5.15/include/QtCore/qset.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcontiguouscache.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsharedpointer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsharedpointer_impl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractnativeeventfilter.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstractstate.h \
-		../../rpi-qt/qt5.15/include/QtCore/qabstracttransition.h \
-		../../rpi-qt/qt5.15/include/QtCore/qanimationgroup.h \
-		../../rpi-qt/qt5.15/include/QtCore/qarraydataops.h \
-		../../rpi-qt/qt5.15/include/QtCore/qarraydatapointer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbasictimer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbitarray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbuffer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qbytearraymatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcache.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcalendar.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborarray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborvalue.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdatetime.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborcommon.h \
-		../../rpi-qt/qt5.15/include/QtCore/qregularexpression.h \
-		../../rpi-qt/qt5.15/include/QtCore/qurl.h \
-		../../rpi-qt/qt5.15/include/QtCore/qurlquery.h \
-		../../rpi-qt/qt5.15/include/QtCore/quuid.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcbormap.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborstream.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborstreamreader.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfloat16.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcborstreamwriter.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcollator.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcommandlineoption.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcommandlineparser.h \
-		../../rpi-qt/qt5.15/include/QtCore/qconcatenatetablesproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qcryptographichash.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdatastream.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdeadlinetimer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qelapsedtimer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdir.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfileinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfile.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfiledevice.h \
-		../../rpi-qt/qt5.15/include/QtCore/qdiriterator.h \
-		../../rpi-qt/qt5.15/include/QtCore/qeasingcurve.h \
-		../../rpi-qt/qt5.15/include/QtCore/qendian.h \
-		../../rpi-qt/qt5.15/include/QtCore/qeventtransition.h \
-		../../rpi-qt/qt5.15/include/QtCore/qexception.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfactoryinterface.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfileselector.h \
-		../../rpi-qt/qt5.15/include/QtCore/QObject \
-		../../rpi-qt/qt5.15/include/QtCore/QStringList \
-		../../rpi-qt/qt5.15/include/QtCore/qfilesystemwatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfinalstate.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfuture.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfutureinterface.h \
-		../../rpi-qt/qt5.15/include/QtCore/qrunnable.h \
-		../../rpi-qt/qt5.15/include/QtCore/qresultstore.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfuturesynchronizer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qfuturewatcher.h \
-		../../rpi-qt/qt5.15/include/QtCore/qhistorystate.h \
-		../../rpi-qt/qt5.15/include/QtCore/qidentityproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qisenum.h \
-		../../rpi-qt/qt5.15/include/QtCore/qitemselectionmodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qjsonarray.h \
-		../../rpi-qt/qt5.15/include/QtCore/qjsonvalue.h \
-		../../rpi-qt/qt5.15/include/QtCore/qjsondocument.h \
-		../../rpi-qt/qt5.15/include/QtCore/qjsonobject.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlibrary.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlibraryinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qversionnumber.h \
-		../../rpi-qt/qt5.15/include/QtCore/qline.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlinkedlist.h \
-		../../rpi-qt/qt5.15/include/QtCore/qlockfile.h \
-		../../rpi-qt/qt5.15/include/QtCore/qloggingcategory.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmargins.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmath.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmessageauthenticationcode.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmetaobject.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmimedata.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmimedatabase.h \
-		../../rpi-qt/qt5.15/include/QtCore/qmimetype.h \
-		../../rpi-qt/qt5.15/include/QtCore/qobjectcleanuphandler.h \
-		../../rpi-qt/qt5.15/include/QtCore/qoperatingsystemversion.h \
-		../../rpi-qt/qt5.15/include/QtCore/qparallelanimationgroup.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpauseanimation.h \
-		../../rpi-qt/qt5.15/include/QtCore/qplugin.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpointer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpluginloader.h \
-		../../rpi-qt/qt5.15/include/QtCore/qprocess.h \
-		../../rpi-qt/qt5.15/include/QtCore/qpropertyanimation.h \
-		../../rpi-qt/qt5.15/include/QtCore/qvariantanimation.h \
-		../../rpi-qt/qt5.15/include/QtCore/qqueue.h \
-		../../rpi-qt/qt5.15/include/QtCore/qrandom.h \
-		../../rpi-qt/qt5.15/include/QtCore/qreadwritelock.h \
-		../../rpi-qt/qt5.15/include/QtCore/qrect.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsize.h \
-		../../rpi-qt/qt5.15/include/QtCore/qresource.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsavefile.h \
-		../../rpi-qt/qt5.15/include/QtCore/qscopedvaluerollback.h \
-		../../rpi-qt/qt5.15/include/QtCore/qscopeguard.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsemaphore.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsequentialanimationgroup.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsettings.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsharedmemory.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsignalmapper.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsignaltransition.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsocketnotifier.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsortfilterproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstack.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstandardpaths.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstate.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstatemachine.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstorageinfo.h \
-		../../rpi-qt/qt5.15/include/QtCore/qstringlistmodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qsystemsemaphore.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtemporarydir.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtemporaryfile.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtextboundaryfinder.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtextcodec.h \
-		../../rpi-qt/qt5.15/include/QtCore/qthread.h \
-		../../rpi-qt/qt5.15/include/QtCore/qthreadpool.h \
-		../../rpi-qt/qt5.15/include/QtCore/qthreadstorage.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtimeline.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtimer.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtimezone.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtranslator.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtransposeproxymodel.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtypetraits.h \
-		../../rpi-qt/qt5.15/include/QtCore/qwaitcondition.h \
-		../../rpi-qt/qt5.15/include/QtCore/QDeadlineTimer \
-		../../rpi-qt/qt5.15/include/QtCore/qwineventnotifier.h \
-		../../rpi-qt/qt5.15/include/QtCore/qxmlstream.h \
-		../../rpi-qt/qt5.15/include/QtCore/qtcoreversion.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QtNetwork \
-		../../rpi-qt/qt5.15/include/QtNetwork/QtNetworkDepends \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtnetworkglobal.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtnetwork-config.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qabstractnetworkcache.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkrequest.h \
-		../../rpi-qt/qt5.15/include/QtCore/QSharedDataPointer \
-		../../rpi-qt/qt5.15/include/QtCore/QString \
-		../../rpi-qt/qt5.15/include/QtCore/QUrl \
-		../../rpi-qt/qt5.15/include/QtCore/QVariant \
-		../../rpi-qt/qt5.15/include/QtNetwork/qabstractsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qauthenticator.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qdnslookup.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qdtls.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtcpsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslerror.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslcertificate.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qssl.h \
-		../../rpi-qt/qt5.15/include/QtCore/QFlags \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhostaddress.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhostinfo.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhstspolicy.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhttp2configuration.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qhttpmultipart.h \
-		../../rpi-qt/qt5.15/include/QtCore/QByteArray \
-		../../rpi-qt/qt5.15/include/QtCore/QIODevice \
-		../../rpi-qt/qt5.15/include/QtNetwork/QNetworkRequest \
-		../../rpi-qt/qt5.15/include/QtNetwork/qlocalserver.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qlocalsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkaccessmanager.h \
-		../../rpi-qt/qt5.15/include/QtCore/QVector \
-		../../rpi-qt/qt5.15/include/QtNetwork/QSslConfiguration \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslconfiguration.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QSslPreSharedKeyAuthenticator \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslpresharedkeyauthenticator.h \
-		../../rpi-qt/qt5.15/include/QtCore/QMetaType \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkconfigmanager.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkconfiguration.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkcookie.h \
-		../../rpi-qt/qt5.15/include/QtCore/QList \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkcookiejar.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkdatagram.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkdiskcache.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkinterface.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkproxy.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworkreply.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QNetworkAccessManager \
-		../../rpi-qt/qt5.15/include/QtNetwork/qnetworksession.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qocspresponse.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qpassworddigestor.h \
-		../../rpi-qt/qt5.15/include/QtCore/QCryptographicHash \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsctpserver.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtcpserver.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsctpsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslcertificateextension.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslcipher.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qssldiffiehellmanparameters.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslellipticcurve.h \
-		../../rpi-qt/qt5.15/include/QtCore/QHash \
-		../../rpi-qt/qt5.15/include/QtNetwork/qsslkey.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qudpsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/qtnetworkversion.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qmaskgenerator.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsockets_global.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsocket.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QAbstractSocket \
-		../../rpi-qt/qt5.15/include/QtNetwork/QNetworkProxy \
-		../../rpi-qt/qt5.15/include/QtNetwork/QSslError \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsocketprotocol.h \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsocketcorsauthenticator.h \
-		../../rpi-qt/qt5.15/include/QtCore/QScopedPointer \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qwebsocketserver.h \
-		../../rpi-qt/qt5.15/include/QtNetwork/QHostAddress \
-		../../rpi-qt/qt5.15/include/QtWebSockets/qtwebsocketsversion.h
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/QtWebSockets \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/QtWebSocketsDepends \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QtCore \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QtCoreDepends \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractanimation.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstracteventdispatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractitemmodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvariant.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmap.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdebug.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qhash.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtextstream.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qiodevice.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlocale.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qshareddata.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qset.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcontiguouscache.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsharedpointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsharedpointer_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractnativeeventfilter.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstractstate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qabstracttransition.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qanimationgroup.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qarraydataops.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qarraydatapointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbasictimer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbitarray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbuffer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbytearraymatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcache.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcalendar.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborarray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborvalue.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdatetime.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborcommon.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qregularexpression.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qurl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qurlquery.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/quuid.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcbormap.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborstream.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborstreamreader.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfloat16.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcborstreamwriter.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcollator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcommandlineoption.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcommandlineparser.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qconcatenatetablesproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcryptographichash.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdatastream.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdeadlinetimer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qelapsedtimer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdir.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfileinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfile.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfiledevice.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdiriterator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qeasingcurve.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qendian.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qeventtransition.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qexception.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfactoryinterface.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfileselector.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QObject \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QStringList \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfilesystemwatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfinalstate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfuture.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfutureinterface.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qrunnable.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qresultstore.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfuturesynchronizer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfuturewatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qhistorystate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qidentityproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qisenum.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qitemselectionmodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qjsonarray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qjsonvalue.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qjsondocument.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qjsonobject.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlibrary.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlibraryinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qversionnumber.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qline.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlinkedlist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlockfile.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qloggingcategory.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmargins.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmath.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmessageauthenticationcode.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmetaobject.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmimedata.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmimedatabase.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmimetype.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobjectcleanuphandler.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qoperatingsystemversion.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qparallelanimationgroup.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpauseanimation.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qplugin.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpluginloader.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qprocess.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpropertyanimation.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvariantanimation.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qqueue.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qrandom.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qreadwritelock.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qrect.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsize.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qresource.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsavefile.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qscopedvaluerollback.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qscopeguard.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsemaphore.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsequentialanimationgroup.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsettings.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsharedmemory.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsignalmapper.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsignaltransition.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsocketnotifier.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsortfilterproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstack.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstandardpaths.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstatemachine.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstorageinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringlistmodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsystemsemaphore.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtemporarydir.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtemporaryfile.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtextboundaryfinder.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtextcodec.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qthread.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qthreadpool.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qthreadstorage.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtimeline.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtimer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtimezone.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtranslator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtransposeproxymodel.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtypetraits.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qwaitcondition.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QDeadlineTimer \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qwineventnotifier.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qxmlstream.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtcoreversion.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QtNetwork \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QtNetworkDepends \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtnetworkglobal.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtnetwork-config.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qabstractnetworkcache.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkrequest.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QSharedDataPointer \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QString \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QUrl \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QVariant \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qabstractsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qauthenticator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qdnslookup.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qdtls.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtcpsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslerror.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslcertificate.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qssl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QFlags \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhostaddress.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhostinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhstspolicy.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhttp2configuration.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qhttpmultipart.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QByteArray \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QIODevice \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QNetworkRequest \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qlocalserver.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qlocalsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkaccessmanager.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QVector \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QSslConfiguration \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslconfiguration.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QMetaType \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkconfigmanager.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkconfiguration.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkcookie.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QList \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkcookiejar.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkdatagram.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkdiskcache.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkinterface.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkproxy.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworkreply.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QNetworkAccessManager \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qnetworksession.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qocspresponse.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qpassworddigestor.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QCryptographicHash \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsctpserver.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtcpserver.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsctpsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslcertificateextension.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslcipher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qssldiffiehellmanparameters.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslellipticcurve.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QHash \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qsslkey.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qudpsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/qtnetworkversion.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qmaskgenerator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsockets_global.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocket.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QAbstractSocket \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QNetworkProxy \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QSslError \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocketprotocol.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocketcorsauthenticator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QScopedPointer \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocketserver.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QHostAddress \
+		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qtwebsocketsversion.h \
+		Alarm.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 moc_WebSocketServer.o: moc_WebSocketServer.cpp 
