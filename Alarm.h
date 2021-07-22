@@ -17,12 +17,14 @@ class Alarm
 {
 private:
     const char* time2buzz;
-    QProcess* process;
+    QProcess* buzzProcess;
+    QProcess* lcdProcess;
 public:
     Alarm();
     Alarm(const char* time2buzz);
     void setTime2Buzz(const char * time2buzz);
     void buzz();
+    void wakeUpScreen();
     bool waitForBuzz();
 };
 

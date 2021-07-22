@@ -7,6 +7,7 @@
 #include <QtCore/QList>
 #include <QtCore/QByteArray>
 #include <QtNetwork/QSslError>
+#include "alarm.h"
 
 #include "Alarm.h"
 
@@ -30,6 +31,7 @@ private:
     QWebSocketServer *webSocketServer;
     QList<QWebSocket *> clients;
     QProcess* process;
+    Alarm* alarm;
 };
 
 #endif // WEBSOCKETSERVER_H

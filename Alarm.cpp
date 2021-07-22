@@ -12,20 +12,38 @@ void Alarm::setTime2Buzz(const char* time2Buzz){
 }
 
 void Alarm::buzz() {
-    std::cout << "WAAAAAKE UP" << std::endl;
-    this->process = new QProcess(nullptr);
+    this->buzzProcess = new QProcess(nullptr);
     QStringList args = QStringList();
     args << QDir::currentPath() + QDir::separator() + "buzzer.py";
-    this->process->start("python", args, QIODevice::ReadWrite);
+    this->buzzProcess->start("python", args, QIODevice::ReadWrite);
 
-    if(!this->process->waitForStarted(-1)){
-        std::cerr << "An error occured while starting process" << std::endl;
+    if(!this->buzzProcess->waitForStarted(-1)){
+        std::cerr << "An error occured while starting buzzProcess" << std::endl;
     }
 
-    if(this->process->waitForFinished(-1)){
-        this->process->close();
+    if(this->buzzProcess->waitForFinished(-1)){
+        this->buzzProcess->close();
     } else {
-        std::cerr << "An error occured while running process" << std::endl;
+        std::cerr << "An error occured while running buzzProcess" << std::endl;
+    }
+}
+
+void Alarm::wakeUpScreen() {
+    std::cout << "WAAAAAKE UP" << std::endl;
+    this->buzzProcess = new QProcess(nullptr);
+    QStringList args = QStringList();
+    args << QDir::currentPath() + QDir::separator() + "LCD.py";
+    args << "WAAAAKE UP";
+    this->buzzProcess->start("python", args, QIODevice::ReadWrite);
+
+    if(!this->buzzProcess->waitForStarted(-1)){
+        std::cerr << "An error occured while starting buzzProcess" << std::endl;
+    }
+
+    if(this->buzzProcess->waitForFinished(-1)){
+        this->buzzProcess->close();
+    } else {
+        std::cerr << "An error occured while running buzzProcess" << std::endl;
     }
 }
 
@@ -44,9 +62,10 @@ bool Alarm::waitForBuzz(){
                 }
             }
             this->buzz();
+            this->wakeUpScreen();
         });
         loopThread.detach();
-    }  catch (std::exception err) {
+    }  catch (std::exception const& err) {
         std::cerr << err.what() << std::endl;
         return false;
     }

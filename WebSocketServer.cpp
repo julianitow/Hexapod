@@ -1,7 +1,7 @@
 #include "WebSocketServer.h"
 
 WebSocketServer::WebSocketServer(int port, QObject *parent) : QObject(parent), webSocketServer(nullptr) {
-    // this->process->setProgram("python");
+    this->alarm = new Alarm();
     webSocketServer = new QWebSocketServer("Robot server", QWebSocketServer::SecureMode, this);
     QSslConfiguration sslConfiguration;
     QString certPath = qApp->applicationDirPath().append("/localhost.cert");
@@ -106,9 +106,11 @@ void WebSocketServer::processMessage(QString message) {
         } else if (message.contains("wut")) {
             QStringList splited = message.split(" ");
             QString timeString = splited[2].split(".")[0];
+#ifdef DEBUG
             qDebug() << timeString;
-            Alarm alarm = Alarm(timeString.toStdString().c_str());
-            alarm.waitForBuzz();
+#endif
+            this->alarm->setTime2Buzz(timeString.toStdString().c_str());
+            this->alarm->waitForBuzz();
         }
     }
 }
