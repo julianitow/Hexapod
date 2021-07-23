@@ -9,7 +9,7 @@
 #include <QtNetwork/QSslError>
 #include "alarm.h"
 
-#include "Alarm.h"
+#include "alarm.h"
 
 class WebSocketServer : public QObject {
     Q_OBJECT

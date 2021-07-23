@@ -15,7 +15,11 @@ void Alarm::buzz() {
     this->buzzProcess = new QProcess(nullptr);
     QStringList args = QStringList();
     args << QDir::currentPath() + QDir::separator() + "buzzer.py";
-    this->buzzProcess->start("python", args, QIODevice::ReadWrite);
+    this->buzzProcess->setProgram("python");
+    this->buzzProcess->setArguments(args);
+    this->buzzProcess->open(QIODevice::ReadWrite);
+    this->buzzProcess->startDetached();
+    //this->buzzProcess->start("python", args, QIODevice::ReadWrite);
 
     if(!this->buzzProcess->waitForStarted(-1)){
         std::cerr << "An error occured while starting buzzProcess" << std::endl;
@@ -29,27 +33,47 @@ void Alarm::buzz() {
 }
 
 void Alarm::wakeUpScreen() {
-    std::cout << "WAAAAAKE UP" << std::endl;
-    this->buzzProcess = new QProcess(nullptr);
+    // std::cout << "WAAAAAKE UP" << std::endl;
+    this->lcdProcess = new QProcess(nullptr);
     QStringList args = QStringList();
     args << QDir::currentPath() + QDir::separator() + "LCD.py";
     args << "WAAAAKE UP";
-    this->buzzProcess->start("python", args, QIODevice::ReadWrite);
+    this->lcdProcess->start("python", args, QIODevice::ReadWrite);
 
-    if(!this->buzzProcess->waitForStarted(-1)){
+    if(!this->lcdProcess->waitForStarted(-1)){
         std::cerr << "An error occured while starting buzzProcess" << std::endl;
     }
 
-    if(this->buzzProcess->waitForFinished(-1)){
-        this->buzzProcess->close();
+    if(this->lcdProcess->waitForFinished(-1)){
+        this->lcdProcess->close();
     } else {
         std::cerr << "An error occured while running buzzProcess" << std::endl;
     }
 }
 
+bool Alarm::isBuzzing(){
+    qDebug() << "Is already buzzing:" << this->buzzProcess->state();
+    if (this->buzzProcess->state() == QProcess::Running){
+        return true;
+    }
+    return false;
+}
+
+void Alarm::stopBuzzing() {
+    try {
+        this->buzzProcess->close();
+        QStringList args = QStringList();
+        args << QDir::currentPath() + QDir::separator() + "stopBuzzer.py";
+        this->buzzProcess->setArguments(args);
+        this->buzzProcess->startDetached();
+    }  catch (std::exception const& err) {
+        std::cerr << "Eception occured: " << err.what() << std::endl;
+    }
+}
+
 bool Alarm::waitForBuzz(){
     try {
-        std::thread loopThread([this]{
+        this->buzzThread = new std::thread([this]{
             char buff[10];
             while(strcmp(buff, this->time2buzz) != 0){
                 auto now = std::chrono::system_clock::now();
@@ -64,7 +88,7 @@ bool Alarm::waitForBuzz(){
             this->buzz();
             this->wakeUpScreen();
         });
-        loopThread.detach();
+        this->buzzThread->detach();
     }  catch (std::exception const& err) {
         std::cerr << err.what() << std::endl;
         return false;

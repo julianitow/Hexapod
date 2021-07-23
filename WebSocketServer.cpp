@@ -111,6 +111,16 @@ void WebSocketServer::processMessage(QString message) {
 #endif
             this->alarm->setTime2Buzz(timeString.toStdString().c_str());
             this->alarm->waitForBuzz();
+        } else if (message.contains("buzz")) {
+            QStringList splited = message.split(":");
+            QString cmd = splited[1];
+            if(cmd.contains("stop")){
+                if(this->alarm->isBuzzing()){
+                    this->alarm->stopBuzzing();
+                } else {
+                    pClient->sendTextMessage("buzzer: false");
+                }
+            }
         }
     }
 }
