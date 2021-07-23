@@ -106,20 +106,16 @@ void WebSocketServer::processMessage(QString message) {
         } else if (message.contains("wut")) {
             QStringList splited = message.split(" ");
             QString timeString = splited[2].split(".")[0];
-#ifdef DEBUG
-            qDebug() << timeString;
-#endif
+// #ifdef DEBUG
+            qDebug() << "TimeString: " << timeString.toStdString().c_str();
+// #endif
             this->alarm->setTime2Buzz(timeString.toStdString().c_str());
             this->alarm->waitForBuzz();
         } else if (message.contains("buzz")) {
             QStringList splited = message.split(":");
             QString cmd = splited[1];
             if(cmd.contains("stop")){
-                if(this->alarm->isBuzzing()){
-                    this->alarm->stopBuzzing();
-                } else {
-                    pClient->sendTextMessage("buzzer: false");
-                }
+                this->alarm->stopBuzzing();
             }
         }
     }

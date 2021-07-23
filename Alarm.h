@@ -6,6 +6,8 @@
 #include <iostream>
 #include <thread>
 #include <string.h>
+#include <chrono>
+#include <functional>
 
 #define DEBUG true
 
@@ -24,6 +26,7 @@ public:
     Alarm();
     Alarm(const char* time2buzz);
     void setTime2Buzz(const char * time2buzz);
+    static void threadExec(Alarm*);
     void buzz();
     void wakeUpScreen();
     void stopBuzzing();

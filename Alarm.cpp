@@ -61,6 +61,7 @@ bool Alarm::isBuzzing(){
 
 void Alarm::stopBuzzing() {
     try {
+        this->buzzThread->~thread();
         this->buzzProcess->close();
         QStringList args = QStringList();
         args << QDir::currentPath() + QDir::separator() + "stopBuzzer.py";
@@ -71,23 +72,27 @@ void Alarm::stopBuzzing() {
     }
 }
 
+void Alarm::threadExec(Alarm* alarm){
+
+    char buff[10];
+    while(strcmp(buff, alarm->time2buzz) != 0){
+        auto now = std::chrono::system_clock::now();
+        std::time_t nowTime = std::chrono::system_clock::to_time_t(now);
+        struct tm * timeInfo = std::localtime(&nowTime);
+        std::strftime(buff, 10, "%H:%M:00", timeInfo);
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+        if(DEBUG){
+            std::cout << "Now is: " << buff << std::endl;
+            std::cout << "Time to buzz: " << alarm->time2buzz << std::endl;
+        }
+    }
+    alarm->buzz();
+    alarm->wakeUpScreen();
+}
+
 bool Alarm::waitForBuzz(){
     try {
-        this->buzzThread = new std::thread([this]{
-            char buff[10];
-            while(strcmp(buff, this->time2buzz) != 0){
-                auto now = std::chrono::system_clock::now();
-                std::time_t nowTime = std::chrono::system_clock::to_time_t(now);
-                struct tm * timeInfo = std::localtime(&nowTime);
-                std::strftime(buff, 10, "%H:%M:00", timeInfo);
-                if(DEBUG){
-                    std::cout << "Waiting for right time to buzz:" << buff << std::endl;
-                    std::cout << "Time to buzz: " << this->time2buzz << std::endl;
-                }
-            }
-            this->buzz();
-            this->wakeUpScreen();
-        });
+        this->buzzThread = new std::thread(Alarm::threadExec, this);
         this->buzzThread->detach();
     }  catch (std::exception const& err) {
         std::cerr << err.what() << std::endl;
