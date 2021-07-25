@@ -1,32 +1,46 @@
-#include "alarm.h"
+#include "Alarm.h"
+Alarm* Alarm::alarm_ = nullptr;
+std::thread* Alarm::buzzThread = nullptr;
+pthread_t Alarm::threadHandle = NULL;
 
 Alarm::Alarm()
 {}
 
 Alarm::Alarm(const char* time2Buzz) {
-    this->time2buzz = time2Buzz;
+    Alarm::getAlarm()->time2buzz = time2Buzz;
+}
+
+Alarm* Alarm::getAlarm(){
+    if (Alarm::alarm_ == nullptr){
+        Alarm::alarm_ = new Alarm();
+    }
+    return Alarm::alarm_;
+}
+
+bool Alarm::isAlarmExists() {
+    return Alarm::alarm_ == nullptr ? false : true;
 }
 
 void Alarm::setTime2Buzz(const char* time2Buzz){
-   this->time2buzz = time2Buzz;
+   Alarm::time2buzz = time2Buzz;
 }
 
 void Alarm::buzz() {
-    this->buzzProcess = new QProcess(nullptr);
+    Alarm::getAlarm()->buzzProcess = new QProcess(nullptr);
     QStringList args = QStringList();
     args << QDir::currentPath() + QDir::separator() + "buzzer.py";
-    this->buzzProcess->setProgram("python");
-    this->buzzProcess->setArguments(args);
-    this->buzzProcess->open(QIODevice::ReadWrite);
-    this->buzzProcess->startDetached();
-    //this->buzzProcess->start("python", args, QIODevice::ReadWrite);
+    Alarm::getAlarm()->buzzProcess->setProgram("python");
+    Alarm::getAlarm()->buzzProcess->setArguments(args);
+    Alarm::getAlarm()->buzzProcess->open(QIODevice::ReadWrite);
 
-    if(!this->buzzProcess->waitForStarted(-1)){
+    if(!Alarm::getAlarm()->buzzProcess->waitForStarted(-1)){
         std::cerr << "An error occured while starting buzzProcess" << std::endl;
+    } else {
+        Alarm::getAlarm()->wakeUpScreen();
     }
 
-    if(this->buzzProcess->waitForFinished(-1)){
-        this->buzzProcess->close();
+    if(Alarm::getAlarm()->buzzProcess->waitForFinished(-1)){
+        Alarm::getAlarm()->buzzProcess->close();
     } else {
         std::cerr << "An error occured while running buzzProcess" << std::endl;
     }
@@ -34,26 +48,37 @@ void Alarm::buzz() {
 
 void Alarm::wakeUpScreen() {
     // std::cout << "WAAAAAKE UP" << std::endl;
-    this->lcdProcess = new QProcess(nullptr);
+    Alarm::getAlarm()->lcdProcess = new QProcess(nullptr);
     QStringList args = QStringList();
     args << QDir::currentPath() + QDir::separator() + "LCD.py";
     args << "WAAAAKE UP";
-    this->lcdProcess->start("python", args, QIODevice::ReadWrite);
+    Alarm::getAlarm()->lcdProcess->setProgram("python");
+    Alarm::getAlarm()->lcdProcess->setArguments(args);
+    Alarm::getAlarm()->lcdProcess->open(QIODevice::ReadWrite);
 
-    if(!this->lcdProcess->waitForStarted(-1)){
-        std::cerr << "An error occured while starting buzzProcess" << std::endl;
+    if(!Alarm::getAlarm()->lcdProcess->waitForStarted(-1)){
+        std::cerr << "An error occured while starting lcdProcess" << std::endl;
     }
 
-    if(this->lcdProcess->waitForFinished(-1)){
-        this->lcdProcess->close();
+    if(Alarm::getAlarm()->lcdProcess->waitForFinished(-1)){
+        Alarm::getAlarm()->lcdProcess->close();
     } else {
-        std::cerr << "An error occured while running buzzProcess" << std::endl;
+        std::cerr << "An error occured while running lcdProcess" << std::endl;
     }
+}
+
+void Alarm::stopBuzzer() {
+    Alarm::getAlarm()->stopBuzzerProcess = new QProcess(nullptr);
+    QStringList args = QStringList();
+    args << QDir::currentPath() + QDir::separator() + "stopBuzzer.py";
+    Alarm::getAlarm()->stopBuzzerProcess->setProgram("python");
+    Alarm::getAlarm()->stopBuzzerProcess->setArguments(args);
+    Alarm::getAlarm()->stopBuzzerProcess->open(QIODevice::ReadWrite);
 }
 
 bool Alarm::isBuzzing(){
     qDebug() << "Is already buzzing:" << this->buzzProcess->state();
-    if (this->buzzProcess->state() == QProcess::Running){
+    if (Alarm::getAlarm()->buzzProcess->state() == QProcess::Running){
         return true;
     }
     return false;
@@ -61,21 +86,35 @@ bool Alarm::isBuzzing(){
 
 void Alarm::stopBuzzing() {
     try {
-        this->buzzThread->~thread();
-        this->buzzProcess->close();
         QStringList args = QStringList();
-        args << QDir::currentPath() + QDir::separator() + "stopBuzzer.py";
-        this->buzzProcess->setArguments(args);
-        this->buzzProcess->startDetached();
+        pthread_cancel(Alarm::threadHandle);
+
+        if (Alarm::getAlarm()->buzzProcess != nullptr) {
+            if(Alarm::getAlarm()->buzzProcess->isOpen()){
+                Alarm::getAlarm()->buzzProcess->close();
+                Alarm::getAlarm()->stopBuzzer();
+            }
+        }
+        if (Alarm::getAlarm()->lcdProcess != nullptr) {
+            if (Alarm::getAlarm()->lcdProcess->isOpen()) {
+                Alarm::getAlarm()->lcdProcess->close();
+                Alarm::getAlarm()->lcdProcess = new QProcess(nullptr);
+                args = QStringList();
+                args << QDir::currentPath() + QDir::separator() + "LCD.py";
+                args << "Status: Online";
+                Alarm::getAlarm()->lcdProcess->setProgram("python");
+                Alarm::getAlarm()->lcdProcess->setArguments(args);
+                Alarm::getAlarm()->lcdProcess->open(QIODevice::ReadWrite);
+            }
+        }
     }  catch (std::exception const& err) {
         std::cerr << "Eception occured: " << err.what() << std::endl;
     }
 }
 
-void Alarm::threadExec(Alarm* alarm){
-
+void Alarm::threadExec(const char* time){
     char buff[10];
-    while(strcmp(buff, alarm->time2buzz) != 0){
+    while(strcmp(buff, time) != 0){
         auto now = std::chrono::system_clock::now();
         std::time_t nowTime = std::chrono::system_clock::to_time_t(now);
         struct tm * timeInfo = std::localtime(&nowTime);
@@ -83,18 +122,22 @@ void Alarm::threadExec(Alarm* alarm){
         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
         if(DEBUG){
             std::cout << "Now is: " << buff << std::endl;
-            std::cout << "Time to buzz: " << alarm->time2buzz << std::endl;
+            std::cout << "Time to buzz: " << time << std::endl;
         }
     }
-    alarm->buzz();
-    alarm->wakeUpScreen();
+    Alarm::getAlarm()->buzz();
 }
 
-bool Alarm::waitForBuzz(){
+const char* Alarm::getTime2Buzz() {
+    return Alarm::getAlarm()->time2buzz;
+}
+
+bool Alarm::waitForBuzz(const char* time){
     try {
-        this->buzzThread = new std::thread(Alarm::threadExec, this);
-        this->buzzThread->detach();
-    }  catch (std::exception const& err) {
+        Alarm::buzzThread = new std::thread(Alarm::threadExec, time);
+        Alarm::threadHandle = Alarm::buzzThread->native_handle();
+        Alarm::buzzThread->detach();
+    }  catch (std::system_error const& err) {
         std::cerr << err.what() << std::endl;
         return false;
     }

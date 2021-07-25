@@ -1,7 +1,7 @@
 #include "WebSocketServer.h"
 
 WebSocketServer::WebSocketServer(int port, QObject *parent) : QObject(parent), webSocketServer(nullptr) {
-    this->alarm = new Alarm();
+    this->alarm = Alarm::getAlarm();
     webSocketServer = new QWebSocketServer("Robot server", QWebSocketServer::SecureMode, this);
     QSslConfiguration sslConfiguration;
     QString certPath = qApp->applicationDirPath().append("/localhost.cert");
@@ -87,6 +87,15 @@ QByteArray WebSocketServer::executeScript(QString script, QString arg) {
     }
 }
 
+QString WebSocketServer::alarmStatus(){
+    if(Alarm::isAlarmExists()){
+        std::cout << "HEEERE" << std::endl;
+        return "alarm:" + QString(Alarm::getAlarm()->getTime2Buzz());
+    }
+    std::cout << "Et bah non chech !" << std::endl;
+    return "";
+}
+
 void WebSocketServer::processMessage(QString message) {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
     qDebug() << "Received:" << message;
@@ -106,17 +115,23 @@ void WebSocketServer::processMessage(QString message) {
         } else if (message.contains("wut")) {
             QStringList splited = message.split(" ");
             QString timeString = splited[2].split(".")[0];
-// #ifdef DEBUG
-            qDebug() << "TimeString: " << timeString.toStdString().c_str();
-// #endif
-            this->alarm->setTime2Buzz(timeString.toStdString().c_str());
-            this->alarm->waitForBuzz();
+            Alarm::getAlarm()->setTime2Buzz(timeString.toStdString().c_str());
+            Alarm::getAlarm()->waitForBuzz(timeString.toStdString().c_str());
         } else if (message.contains("buzz")) {
             QStringList splited = message.split(":");
             QString cmd = splited[1];
             if(cmd.contains("stop")){
-                this->alarm->stopBuzzing();
+                Alarm::getAlarm()->stopBuzzing();
             }
+        } else if (message.contains("alarmState")){
+            if(!Alarm::isAlarmExists()){
+                pClient->sendTextMessage("No active alarm set");
+                std::cout << "Sent: No active nia nia " << std::endl;
+                return;
+            }
+            QString status = this->alarmStatus();
+            std::cout << "AlarmState: " << status.toStdString() << std::endl;
+            pClient->sendTextMessage(status);
         }
     }
 }

@@ -17,6 +17,7 @@ public:
     WebSocketServer(int port, QObject *parent = nullptr);
 public slots:
     QByteArray executeScript(QString script, QString arg = "");
+    QString alarmStatus();
 
 signals:
     void commandReceived(QString command);

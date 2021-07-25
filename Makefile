@@ -985,7 +985,10 @@ moc_WebSocketServer.cpp: WebSocketServer.h \
 		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocketserver.h \
 		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QHostAddress \
 		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qtwebsocketsversion.h \
-		Alarm.h \
+		alarm.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QProcess \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QDir \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QDebug \
 		moc_predefs.h \
 		/home/julianitow/rpi-qt/qt5.15/bin/moc
 	/home/julianitow/rpi-qt/qt5.15/bin/moc $(DEFINES) --include /mnt/hgfs/guill/work/WebSocketServerQt/moc_predefs.h -I/home/julianitow/rpi-qt/qt5.15/mkspecs/devices/linux-rasp-pi4-v3d-g++ -I/mnt/hgfs/guill/work/WebSocketServerQt -I/home/julianitow/rpi-qt/qt5.15/include -I/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets -I/home/julianitow/rpi-qt/qt5.15/include/QtNetwork -I/home/julianitow/rpi-qt/qt5.15/include/QtCore -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/arm-linux-gnueabihf/include/c++/8.3.0 -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/arm-linux-gnueabihf/include/c++/8.3.0/arm-linux-gnueabihf -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/arm-linux-gnueabihf/include/c++/8.3.0/backward -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/lib/gcc/arm-linux-gnueabihf/8.3.0/include -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/lib/gcc/arm-linux-gnueabihf/8.3.0/include-fixed -I/home/julianitow/rpi-qt/tools/cross-pi-gcc-8.3.0-1/arm-linux-gnueabihf/include -I/home/julianitow/rpi-qt/sysroot/usr/include WebSocketServer.h -o moc_WebSocketServer.cpp
@@ -1004,7 +1007,79 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 ####### Compile
 
-Alarm.o: Alarm.cpp Alarm.h
+Alarm.o: Alarm.cpp alarm.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QProcess \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qprocess.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qiodevice.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qglobal.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qconfig-bootstrapped.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qconfig.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtcore-config.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsystemdetection.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qprocessordetection.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcompilerdetection.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtypeinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsysinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlogging.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qflags.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbasicatomic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic_bootstrap.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qgenericatomic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic_cxx11.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qatomic_msvc.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qglobalstatic.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmutex.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qnumeric.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qversiontagging.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobject.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobjectdefs.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qnamespace.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobjectdefs_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstring.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qchar.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbytearray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qrefcount.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qarraydata.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringliteral.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringalgorithms.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringview.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringbuilder.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qalgorithms.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qiterator.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qhashfunctions.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpair.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvector.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcontainertools_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qpoint.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qbytearraylist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringlist.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qregexp.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qstringmatcher.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcoreevent.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qscopedpointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmetatype.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvarlengtharray.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcontainerfwd.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qobject_impl.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qshareddata.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qhash.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QDir \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdir.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfileinfo.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfile.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qfiledevice.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QDebug \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qdebug.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qmap.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qtextstream.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qlocale.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qvariant.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qset.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qcontiguouscache.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsharedpointer.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/qsharedpointer_impl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Alarm.o Alarm.cpp
 
 Brain.o: Brain.cpp Brain.h
@@ -1288,7 +1363,10 @@ WebSocketServer.o: WebSocketServer.cpp WebSocketServer.h \
 		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocketserver.h \
 		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QHostAddress \
 		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qtwebsocketsversion.h \
-		Alarm.h
+		alarm.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QProcess \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QDir \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o WebSocketServer.o WebSocketServer.cpp
 
 main.o: main.cpp /home/julianitow/rpi-qt/qt5.15/include/QtCore/QCoreApplication \
@@ -1570,7 +1648,10 @@ main.o: main.cpp /home/julianitow/rpi-qt/qt5.15/include/QtCore/QCoreApplication 
 		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qwebsocketserver.h \
 		/home/julianitow/rpi-qt/qt5.15/include/QtNetwork/QHostAddress \
 		/home/julianitow/rpi-qt/qt5.15/include/QtWebSockets/qtwebsocketsversion.h \
-		Alarm.h
+		alarm.h \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QProcess \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QDir \
+		/home/julianitow/rpi-qt/qt5.15/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 moc_WebSocketServer.o: moc_WebSocketServer.cpp 
