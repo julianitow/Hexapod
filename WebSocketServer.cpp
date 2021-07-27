@@ -129,9 +129,9 @@ void WebSocketServer::processMessage(QString message) {
                 std::cout << "Sent: No active nia nia " << std::endl;
                 return;
             }
-            QString status = this->alarmStatus();
-            std::cout << "AlarmState: " << status.toStdString() << std::endl;
-            pClient->sendTextMessage(status);
+            QString status = "status: " + Alarm::getAlarm()->status(pClient);
+            //std::cout << "AlarmState: " << status.toStdString() << std::endl;
+            //pClient->sendTextMessage(status);
         }
     }
 }

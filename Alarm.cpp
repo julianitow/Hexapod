@@ -107,12 +107,15 @@ void Alarm::stopBuzzing() {
                 Alarm::getAlarm()->lcdProcess->open(QIODevice::ReadWrite);
             }
         }
+        Alarm::getAlarm()->threadHandle = NULL;
+        Alarm::getAlarm()->buzzThread = nullptr;
+        qDebug() << Alarm::getAlarm()->buzzThread;
     }  catch (std::exception const& err) {
         std::cerr << "Eception occured: " << err.what() << std::endl;
     }
 }
 
-void Alarm::threadExec(const char* time){
+void Alarm::threadExec(const char* time) {
     char buff[10];
     while(strcmp(buff, time) != 0){
         auto now = std::chrono::system_clock::now();
@@ -130,6 +133,12 @@ void Alarm::threadExec(const char* time){
 
 const char* Alarm::getTime2Buzz() {
     return Alarm::getAlarm()->time2buzz;
+}
+
+void Alarm::status(QWebSocket client) {
+    std::thread statusThread = std::thread([client] {
+
+    });
 }
 
 bool Alarm::waitForBuzz(const char* time){

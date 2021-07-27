@@ -10,6 +10,7 @@
 #include <functional>
 #include <cstring>
 #include <pthread.h>
+#include <QWebSocket>
 
 #define DEBUG true
 
@@ -46,6 +47,7 @@ public:
     const char* getTime2Buzz();
     static void initAlarm();
     void stopBuzzer();
+    void status(QWebSocket ws);
 };
 
 #endif // ALARM_H
