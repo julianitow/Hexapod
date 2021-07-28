@@ -15,8 +15,10 @@ class WebSocketServer : public QObject {
     Q_OBJECT
 public:
     WebSocketServer(int port, QObject *parent = nullptr);
+    static void threadExec(WebSocketServer*, std::string, std::string = "");
+    void stopPod();
 public slots:
-    QByteArray executeScript(QString script, QString arg = "");
+    QByteArray executeScript(WebSocketServer*, QString script, QString arg = "");
     QString alarmStatus();
 
 signals:
@@ -32,7 +34,10 @@ private:
     QWebSocketServer *webSocketServer;
     QList<QWebSocket *> clients;
     QProcess* process;
+    QProcess* stopPodProcess;
     Alarm* alarm;
+    static std::thread* movementThread;
+    static pthread_t movementHandle;
 };
 
 #endif // WEBSOCKETSERVER_H

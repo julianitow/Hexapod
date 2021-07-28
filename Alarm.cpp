@@ -32,6 +32,7 @@ void Alarm::buzz() {
     Alarm::getAlarm()->buzzProcess->setProgram("python");
     Alarm::getAlarm()->buzzProcess->setArguments(args);
     Alarm::getAlarm()->buzzProcess->open(QIODevice::ReadWrite);
+    Alarm::getAlarm()->automaticMode(true);
 
     if(!Alarm::getAlarm()->buzzProcess->waitForStarted(-1)){
         std::cerr << "An error occured while starting buzzProcess" << std::endl;
@@ -135,10 +136,23 @@ const char* Alarm::getTime2Buzz() {
     return Alarm::getAlarm()->time2buzz;
 }
 
-void Alarm::status(QWebSocket client) {
+std::string Alarm::status(QWebSocket* client) {
     std::thread statusThread = std::thread([client] {
 
     });
+}
+
+void Alarm::automaticMode(bool enabled) {
+    QStringList args = QStringList();
+    Alarm::getAlarm()->automaticProcess = new QProcess(nullptr);
+    Alarm::getAlarm()->automaticProcess->setProgram("python");
+    if(!enabled){
+        args << QDir::currentPath() + QDir::separator() + "stopPod.py";
+    } else {
+        args << QDir::currentPath() + QDir::separator() + "automaticMode.py";
+    }
+    Alarm::getAlarm()->automaticProcess->setArguments(args);
+    Alarm::getAlarm()->automaticProcess->open(QIODevice::ReadWrite);
 }
 
 bool Alarm::waitForBuzz(const char* time){

@@ -1,4 +1,6 @@
 #include "WebSocketServer.h"
+pthread_t WebSocketServer::movementHandle = NULL;
+std::thread* WebSocketServer::movementThread = nullptr;
 
 WebSocketServer::WebSocketServer(int port, QObject *parent) : QObject(parent), webSocketServer(nullptr) {
     this->alarm = Alarm::getAlarm();
@@ -62,24 +64,33 @@ void WebSocketServer::onSslError(const QList<QSslError> &)
     qDebug() << "Ssl errors occurred";
 }
 
-QByteArray WebSocketServer::executeScript(QString script, QString arg) {
-    this->process = new QProcess(this->parent());
+void WebSocketServer::threadExec(WebSocketServer* server, std::string script, std::string arg) {
+    qDebug() << server->executeScript(server, QString::fromStdString(script), QString::fromStdString(arg));
+}
+
+QByteArray WebSocketServer::executeScript(WebSocketServer* server, QString script, QString arg) {
+    server->process = new QProcess(nullptr);
     QString scriptFile = QDir::currentPath() + QDir::separator() + script + ".py";
     QStringList args = QStringList();
     args << scriptFile;
     args << arg;
-    this->process->start("python", args, QIODevice::ReadWrite);
-    qDebug() << "EC:" << this->process->exitCode();
+    server->process->setProgram("python");
+    server->process->setArguments(args);
+    //this->process->startDetached();
+    server->process->open(QIODevice::ReadWrite);
 
-    if(!this->process->waitForStarted(-1)){
+    if(!server->process->waitForStarted(-1)){
         qDebug() << "An error occured while starting process";
         return "Error";
     }
 
     if(this->process->waitForFinished(-1)){
-        QByteArray result = this->process->readAllStandardOutput();
+        QByteArray result = server->process->readAllStandardOutput();
         qDebug() << "result" << result;
-        this->process->close();
+        qDebug() << "Output:" << server->process->readAllStandardOutput();
+        qDebug() << "Error:" << server->process->readAllStandardError();
+        qDebug() << "EC:" << server->process->exitCode();
+        server->process->close();
         return result;
     } else {
         qDebug() << "An error occured while running process";
@@ -96,21 +107,41 @@ QString WebSocketServer::alarmStatus(){
     return "";
 }
 
+void WebSocketServer::stopPod(){
+    this->stopPodProcess = new QProcess(nullptr);
+    QStringList args = QStringList();
+    args << QDir::currentPath() + QDir::separator() + "stopPod.py";
+    this->stopPodProcess->setProgram("python");
+    this->stopPodProcess->setArguments(args);
+    this->stopPodProcess->open(QIODevice::ReadWrite);
+}
+
 void WebSocketServer::processMessage(QString message) {
     QWebSocket *pClient = qobject_cast<QWebSocket *>(sender());
     qDebug() << "Received:" << message;
     if(pClient) {
-        if(message == "distance"){
-            QByteArray data = executeScript(message);
-            pClient->sendTextMessage(data);
-        } else if (message.contains("lcdprint")){
+        if(message == "forward" || message == "back"){
+            this->movementThread = new std::thread(WebSocketServer::threadExec, this, message.toStdString(), "");
+            WebSocketServer::movementHandle = this->movementThread->native_handle();
+            this->movementThread->detach();
+            //QByteArray data = executeScript(message);
+            pClient->sendTextMessage("OK");
+        } else if (message == "stop") {
+            pthread_cancel(WebSocketServer::movementHandle);
+            if(this->process != nullptr){
+                if(this->process->isOpen()){
+                    this->process->close();
+                    this->stopPod();
+                }
+            }
+        }else if (message.contains("lcdprint")){
             QStringList splited = message.split(":");
             QString lcdMessage = splited[1];
             if(lcdMessage.size() > 16){
                 pClient->sendTextMessage("Message too long");
                 return;
             }
-            executeScript("LCD", lcdMessage);
+            executeScript(this, "LCD", lcdMessage);
             qDebug() << this->process->readAll();
         } else if (message.contains("wut")) {
             QStringList splited = message.split(" ");
@@ -129,7 +160,7 @@ void WebSocketServer::processMessage(QString message) {
                 std::cout << "Sent: No active nia nia " << std::endl;
                 return;
             }
-            QString status = "status: " + Alarm::getAlarm()->status(pClient);
+            QString status = "status: " + QString::fromStdString(Alarm::getAlarm()->status(pClient));
             //std::cout << "AlarmState: " << status.toStdString() << std::endl;
             //pClient->sendTextMessage(status);
         }

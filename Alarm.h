@@ -22,10 +22,11 @@ class Alarm
 {
 private:
     Alarm();
-    Alarm(const char* time2buzz);
+    Alarm(const char*);
     QProcess* buzzProcess;
     QProcess* lcdProcess;
     QProcess* stopBuzzerProcess;
+    QProcess* automaticProcess;
     static std::thread* buzzThread;
     static pthread_t threadHandle;
     static Alarm* alarm_;
@@ -47,7 +48,8 @@ public:
     const char* getTime2Buzz();
     static void initAlarm();
     void stopBuzzer();
-    void status(QWebSocket ws);
+    std::string status(QWebSocket*);
+    void automaticMode(bool);
 };
 
 #endif // ALARM_H
