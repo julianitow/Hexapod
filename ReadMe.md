@@ -20,6 +20,7 @@ Ce repo contient ce que l'on peut appeler, l'âme du pod. Toute sa matière gris
 Une fois QT installé sur les plateformes \
 - ```make```
 - ```scp WebSocketServer pi@hexapod.local:/home/pi/Server_Run```
+- ```scp scripts/*.py pi@hexapod.local:/home/pi/Server_Run```
 
 ## Démarrage
 
