@@ -108,6 +108,7 @@ void Alarm::stopBuzzing() {
                 Alarm::getAlarm()->lcdProcess->open(QIODevice::ReadWrite);
             }
         }
+        Alarm::getAlarm()->automaticMode(false);
         Alarm::getAlarm()->threadHandle = NULL;
         Alarm::getAlarm()->buzzThread = nullptr;
         qDebug() << Alarm::getAlarm()->buzzThread;
